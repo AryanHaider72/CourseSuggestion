@@ -436,7 +436,7 @@ export default function Landing() {
         <div className="container">
             <div className="about-section mx-auto mt-5">
                 <div className="about-image">
-                    <Image alt="person1" src="/about1.webp"/>
+                    <Image alt="person2" src="/about1.webp"/>
                 </div>
                 <div className="about-content">
                     <h1 className="font-weight-bolder mt-5 text-white">Learn new skills onlin<span  style={{color:"#ffa835"}}>e with top</span> educators</h1>
