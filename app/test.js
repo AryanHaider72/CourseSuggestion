@@ -44,7 +44,7 @@ export default function Test() {
       <div style={{ marginTop: '2rem', whiteSpace: 'pre-wrap' }}>
         {reply && (
           <>
-            <h3>🤖 Gemini's Reply:</h3>
+            <h3>🤖 Gemini&apos;s Reply:</h3>
             <p>{reply}</p>
           </>
         )}

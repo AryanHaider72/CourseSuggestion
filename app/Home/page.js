@@ -229,7 +229,7 @@ export default function Landing() {
                 <h1 className="mt-3 ">Website Development </h1>
                 <hr className="w-100"/>
                 <h3 className="mt-3 " style={{textDecoration:'underline 3px #ffa835'}}>About Course:</h3>
-                <p className="text-muted" style={{width:'95%'}}>This comprehensive course takes you from the basics of front-end web development to advanced back-end skills, enabling you to build fully functional, responsive, and scalable websites. Whether you're a complete beginner or 
+                <p className="text-muted" style={{width:'95%'}}>This comprehensive course takes you from the basics of front-end web development to advanced back-end skills, enabling you to build fully functional, responsive, and scalable websites. Whether you&apos;re a complete beginner or 
                     looking to upgrade your skills, this course prepares you for real-world projects and job-ready outcomes.</p>
                 <hr className="w-50 mt-5"></hr>
                 <h3 className="mt-3 " style={{textDecoration:'underline 3px #ffa835'}}>Course Objectives:</h3>
@@ -375,14 +375,14 @@ export default function Landing() {
                 <div className="text-center mx-auto mt-5">
                     <h1 className="text-dark mb-5" style={{textDecoration:'underline 3px #ffa835'}}>Our Courses</h1>
                     <hr className="w-100"/>
-                    <p className="w-75 mx-auto text-secondary">Master today’s most in-demand skills with our expert-led courses, thoughtfully designed to accelerate your career growth, boost your confidence, and help you achieve your professional goals. Whether you're starting fresh or
+                    <p className="w-75 mx-auto text-secondary">Master today&apos;s most in-demand skills with our expert-led courses, thoughtfully designed to accelerate your career growth, boost your confidence, and help you achieve your professional goals. Whether you&apos;re starting fresh or
                          looking to level up, our hands-on learning approach ensures you stay ahead in a competitive world</p>
                 </div>
                 <div className="container mt-4">
                     <div className="row mx-auto justify-content-center">
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
                             <div className="card" style={{width: '20rem', marginRight:'20px', padding:'0'}}>
-                                <img src="/card1.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
+                                <Image src="/card1.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
                                 <div className="card-body">
                                     <p className="text-secondary mb-0">User Development</p>
                                     <h5 className="card-title"> Website Development Bootcamp</h5>
@@ -397,7 +397,7 @@ export default function Landing() {
                         </div>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
                             <div className="card" style={{width: '20rem', marginRight:'20px', padding:'0'}}>
-                                <img src="/card2.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
+                                <Image src="/card2.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
                                 <div className="card-body">
                                     <p className="text-secondary mb-0">User Experience</p>
                                     <h5 className="card-title"> Digital Marketing Fundamentals</h5>
@@ -412,7 +412,7 @@ export default function Landing() {
                         </div>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
                             <div className="card" style={{width: '20rem', marginRight:'20px', padding:'0'}}>
-                                <img src="/card3.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
+                                <Image src="/card3.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
                                 <div className="card-body">
                                     <p className="text-secondary mb-0">User Understanding</p>
                                     <h5 className="card-title"> Data Analytics with Excel & Python</h5>
@@ -436,12 +436,12 @@ export default function Landing() {
         <div className="container">
             <div className="about-section mx-auto mt-5">
                 <div className="about-image">
-                    <img src="/about1.webp"/>
+                    <Image alt="person1" src="/about1.webp"/>
                 </div>
                 <div className="about-content">
                     <h1 className="font-weight-bolder mt-5 text-white">Learn new skills onlin<span  style={{color:"#ffa835"}}>e with top</span> educators</h1>
                     <h6 className="text-muted">Empowering Learning, Everywhere.</h6>
-                    <p>At Coursea, we believe that education should be accessible, practical, and inspiring. Our mission is to empower individuals with the skills they need to thrive in today’s ever-evolving world — no matter where they are.<br/><br/>We offer a wide range of expert-led online courses designed to fit around your life. Whether you're just starting your journey, pivoting to a new career, or upskilling for the future, Coursea is here to guide you every step of the way.</p>
+                    <p>At Coursea, we believe that education should be accessible, practical, and inspiring. Our mission is to empower individuals with the skills they need to thrive in today&apos;s ever-evolving world — no matter where they are.<br/><br/>We offer a wide range of expert-led online courses designed to fit around your life. Whether you&apos;re just starting your journey, pivoting to a new career, or upskilling for the future, Coursea is here to guide you every step of the way.</p>
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
                     <li className="nav-item" role="presentation">
                         <a className="nav-link active" id="active-tab" data-bs-toggle="tab" href="#active" role="tab" aria-controls="active" aria-selected="true">Mission</a>
@@ -460,11 +460,11 @@ export default function Landing() {
                         <br/>Coursea equips learners with the skills and confidence to thrive in real-world careers through flexible, high-quality education.
                         <li>Delivering job-relevant and practical skills</li>
                         <li>Building learner confidence through expert guidance</li>
-                        <li>Equipping individuals with a competitive advantage in today’s digital economy</li>
+                        <li>Equipping individuals with a competitive advantage in today&apos;s digital economy</li>
                     </div>
                     <div className="tab-pane fade" id="link1" role="tabpanel" aria-labelledby="link1-tab">
-                        We’re not just building a course platform — we’re shaping the future of learning. Our ambition is to become a trusted, global destination for anyone who wants to learn, grow, and thrive.
-                        <br/>We’re not just building a course platform — we’re shaping the future of learning. Our ambition is to become a trusted, global destination for anyone who wants to learn, grow, and thrive.
+                        We&apos;re not just building a course platform — we&apos;re shaping the future of learning. Our ambition is to become a trusted, global destination for anyone who wants to learn, grow, and thrive.
+                        <br/>We&apos;re not just building a course platform — we&apos;re shaping the future of learning. Our ambition is to become a trusted, global destination for anyone who wants to learn, grow, and thrive.
                         <li>Constantly innovate with updated content and teaching methods</li>
                         <li>Offer a wide variety of high-demand courses across industries</li>
                         <li>Build a vibrant, inclusive learning community worldwide</li>
@@ -562,7 +562,7 @@ export default function Landing() {
 
             <div className="col-lg-3 col-md-6 p-2">
               <h4 className="text-white mb-4">Stay Connected</h4>
-              <p>Explore our services, get updates, and find what you’re looking for with ease</p>
+              <p>Explore our services, get updates, and find what you&apos;re looking for with ease</p>
               <div className="position-relative w-100">
                 <input
                   className="form-control bg-white border-0 w-100 py-3 ps-4 pe-5"

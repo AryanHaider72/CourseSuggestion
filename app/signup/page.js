@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import UserLayout from '../component/sidebar/page';
 
 export default function Signup(){
     return(
