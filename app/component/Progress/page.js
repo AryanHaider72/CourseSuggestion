@@ -84,7 +84,7 @@ export default function ProgressReport() {
     <div
       ref={scrollContainerRef}
       className="container-fluid px-3 py-3"
-      style={{ overflowY: "auto", maxHeight: "100vh", position: "relative" }}
+      style={{ overflowY: "auto", maxHeight: "80vh", position: "relative" }}
     >
       {/* Title */}
       <h1 className="text-center">Progress Report</h1>

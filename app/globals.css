@@ -131,7 +131,6 @@ nav {
 .About-section{
   width: 100%;
   height: auto;
-  background:linear-gradient(150deg,#ffa835 50% ,#ffffff 50% );
 }
 #contact-section{
   height: auto;
@@ -226,7 +225,16 @@ nav {
   background-color: rgba(255, 255, 255, 0.2);
   color: #fff;
 }
+.custom-select-dropdown {
+  background-color: #fff; /* Normal background color */
+  color: #000; /* Normal text color */
+  border: 1px solid #007bff; /* Primary color for the border */
+}
 
+.custom-select-dropdown option:hover {
+  background-color: #007bff; /* Primary color on hover */
+  color: #fff; /* White text color on hover */
+}
 /* Adjustments for Top Navbar */
 .topbar {
   background-color: #fff;

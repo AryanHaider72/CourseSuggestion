@@ -50,7 +50,7 @@ const PurchasedCourses = () => {
   };
 
   return (
-    <Container style={{ overflowY: 'auto', height: '500px' }}>
+    <Container style={{ overflowY: 'auto', maxHeight: "80vh" }}>
       <h1 className="my-4 text-center">Your Purchased Courses</h1>
       <Row>
         {courses.map((course) => (

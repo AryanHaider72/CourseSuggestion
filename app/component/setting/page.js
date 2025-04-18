@@ -179,7 +179,7 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <div className="container py-2" style={{ overflowY: 'auto', height: '500px' }}>
+    <div className="container py-2" style={{ overflowY: 'auto', maxHeight: "80vh" }}>
       <h2 className="mb-4 text-center">Settings</h2>
 
       <div className="card mb-4 shadow-sm">

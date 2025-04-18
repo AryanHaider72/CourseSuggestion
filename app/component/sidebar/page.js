@@ -23,6 +23,8 @@ export default function UserLayout({ children }) {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const sidebarRef = useRef(null);
+  const userDropdownRef = useRef(null);
+  const settingsDropdownRef = useRef(null);
   const [active, setactive] = useState('dashboard');
 
   const links = [
@@ -51,16 +53,21 @@ export default function UserLayout({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Close sidebar on outside click (mobile only)
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isMobile && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsSidebarVisible(false);
+      if (
+        (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) &&
+        (settingsDropdownRef.current && !settingsDropdownRef.current.contains(event.target))
+      ) {
+        setShowUser(false);
+        setShowSettings(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isMobile]);
+  }, []);
 
   return (
     <div className="d-flex" style={{ minHeight: '100vh', position: 'relative' }}>
@@ -76,7 +83,7 @@ export default function UserLayout({ children }) {
           transition: 'all 0.3s ease',
           position: isMobile ? 'absolute' : 'relative',
           zIndex: 10000,
-          left: isSidebarVisible ? '0' : '-270px',
+          left: isSidebarVisible ? '0px' : '-270px',
           top: 0,
           backgroundColor: '#ffa835',
           overflowX: 'hidden',
@@ -117,7 +124,7 @@ export default function UserLayout({ children }) {
 
           <div className="d-flex align-items-center gap-3 position-relative">
             {/* User Dropdown */}
-            <div className="position-relative">
+            <div className="position-relative" ref={userDropdownRef}>
               <User
                 role="button"
                 color="#ffa835"
@@ -139,7 +146,7 @@ export default function UserLayout({ children }) {
             </div>
 
             {/* Settings Dropdown */}
-            <div className="position-relative">
+            <div className="position-relative" ref={settingsDropdownRef}>
               <Settings
                 role="button"
                 color="#ffa835"

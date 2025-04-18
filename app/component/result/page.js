@@ -70,7 +70,7 @@ export default function ResultPage() {
   ];
 
   return (
-    <div ref={scrollContainerRef} style={{ padding: "1rem",overflowY: "auto", height: "480px", position: "relative" }}>
+    <div ref={scrollContainerRef} style={{ padding: "1rem",overflowY: "auto", maxHeight: "80vh", position: "relative" }}>
       <h1 className="text-center">Result & Certification</h1>
       <hr className="mt-3 mb-4" />
       <table className="user-table table table-bordered mb-4">

@@ -21,15 +21,15 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="container py-5 d-flex justify-content-center align-items-center min-vh-100 bg-body-tertiary">
-      <div className="card shadow-sm p-4" style={{ maxWidth: '500px', width: '100%' }}>
+    <div className="container p-3 d-flex justify-content-center align-items-center  bg-body-tertiary">
+      <div className="card shadow-sm p-5" >
         <div className="text-center mb-4">
           <KeyRound size={40}color='#ffa835' className=" mb-2" />
           <h4 className="fw-bold">Change Password</h4>
           <p className="text-muted small mb-0">Keep your account safe by using a strong password.</p>
         </div>
 
-        <form onSubmit={handleChangePassword}>
+        <form onSubmit={handleChangePassword} >
           <div className="mb-3">
             <label htmlFor="currentPassword" className="form-label">Current Password</label>
             <input

@@ -1,113 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { LibraryBig,  BookUser,  AlarmClockCheck, X } from 'lucide-react';
 import { useState, useEffect,useRef } from "react";
-
-const coursesList = [
-    'Algorithms and Data Structures',
-    'Artificial Intelligence',
-    'Android App Development',
-    'Agile Software Development',
-    'AWS Cloud Fundamentals',
-    'Blockchain Technology',
-    'Big Data Analytics',
-    'Business Intelligence',
-    'C++ Programming',
-    'C# Programming',
-    'Cloud Computing',
-    'Computer Architecture',
-    'Compiler Design',
-    'Cybersecurity Essentials',
-    'Cryptography',
-    'Creative Coding',
-    'Data Science with Python',
-    'Data Visualization',
-    'Database Management Systems',
-    'Deep Learning',
-    'DevOps Foundations',
-    'Digital Logic Design',
-    'Docker & Kubernetes',
-    'E-commerce Development',
-    'Ethical Hacking',
-    'Embedded Systems',
-    'Edge Computing',
-    'Excel for Data Analysis',
-    'Full Stack Development',
-    'Front-End Development',
-    'Flutter App Development',
-    'Functional Programming',
-    'Game Development with Unity',
-    'Git & GitHub',
-    'GraphQL Fundamentals',
-    'Go Programming Language',
-    'Google Cloud Platform (GCP)',
-    'Human-Computer Interaction',
-    'HTML5 & CSS3',
-    'Hadoop Ecosystem',
-    'Hybrid Mobile Apps',
-    'IoT (Internet of Things)',
-    'Information Security',
-    'iOS Development',
-    'Intro to Programming',
-    'Java Programming',
-    'JavaScript Mastery',
-    'Jenkins CI/CD',
-    'JIRA for Project Management',
-    'Kotlin for Android',
-    'Kubernetes Basics',
-    'Kafka Streaming',
-    'Linux Fundamentals',
-    'Lean Software Development',
-    'Linear Algebra for CS',
-    'Machine Learning',
-    'MongoDB Essentials',
-    'MySQL for Developers',
-    'Mobile App Security',
-    'Natural Language Processing',
-    'Network Security',
-    'Node.js API Development',
-    'Neural Networks',
-    'Object-Oriented Programming',
-    'Operating Systems',
-    'OpenCV with Python',
-    'Python for Everybody',
-    'PostgreSQL Basics',
-    'Programming in Rust',
-    'Penetration Testing',
-    'Quantum Computing Basics',
-    'QuickBooks for IT',
-    'ReactJS Development',
-    'Responsive Web Design',
-    'RESTful API Design',
-    'R Programming for Data Science',
-    'Ruby on Rails',
-    'Robotic Process Automation (RPA)',
-    'Software Testing & QA',
-    'Software Engineering',
-    'SQL for Beginners',
-    'Shell Scripting',
-    'Spring Boot with Java',
-    'System Design',
-    'TensorFlow Deep Learning',
-    'TypeScript Basics',
-    'UI/UX Design',
-    'Unity Game Development',
-    'Unix Shell Scripting',
-    'Version Control with Git',
-    'Virtual Reality Development',
-    'Vue.js Crash Course',
-    'Visual Basic Programming',
-    'Web Development Bootcamp',
-    'Web Accessibility Standards',
-    'Xamarin for Cross-Platform Apps',
-    'XML & JSON Data Handling',
-    'YouTube API Integration',
-    'YouTube for Developers',
-    'ZK Framework Basics',
-    'Zero Trust Architecture',
-    'Zig Programming Language'
-  ];
+import { Router } from "next/router";
 
 export default function Landing() {
   const itemRefs = useRef([]);
@@ -118,7 +15,16 @@ export default function Landing() {
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const overlayRef = useRef(null);
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      window.location.href = '/Mcqs';
+    };
       
+    const handleClick = () =>{
+      alert('you have been Registered');
+      window.location.reload();
+    }
     const CashPaymentForm = () => (
         <fieldset>
           <h4 className="mt-4 mx-2">Cash Payment</h4>
@@ -278,7 +184,7 @@ export default function Landing() {
                     </div>
                 </div>
                 */}
-                <a className="btn mt-3 mb-3 text-light mx-auto text-center" id="button1" target="_blank" href="https://wa.me/923335005535">Payments</a>
+                <a className="btn mt-3 mb-3 text-light mx-auto text-center" id="button1" href="/login">Payments</a>
             </div>
         </div>
     </div>
@@ -331,40 +237,8 @@ export default function Landing() {
                 </div>
 
                 <div className="d-flex mt-0">
-                    <div className="mb-3">
-                        <select id="disabledSelect" className="form-select" style={{padding: "0.375rem 1.75rem 0.375rem 0.75rem"}}>
-                            <option style={{}}>Level</option>
-                            <option >Easy</option>
-                            <option>Medium</option>
-                            <option>Hard</option>
-                        </select>
-                    </div>
-                    <div className="position-relative w-25">
-        <input type="text"className="form-control"placeholder="Search for a course..."value={query}onChange={(e) => setQuery(e.target.value)}onFocus={() => setShowSuggestions(true)}onKeyDown={handleKeyDown} />
-  
-        {showSuggestions && suggestions.length > 0 && (
-          <ul
-          className="list-group position-absolute w-100"
-          style={{ zIndex: 999, height: '130px', overflowY: 'scroll' }}
-        >
-          {suggestions.map((course, index) => (
-            <li
-              key={index}
-              ref={el => (itemRefs.current[index] = el)}
-              className={`list-group-item list-group-item-action ${
-                index === highlightedIndex ? 'active' : ''
-              }`}
-              onMouseDown={() => handleSelect(course)}
-              style={{ cursor: 'pointer' }}
-            >
-              {course}
-            </li>
-          ))}
-        </ul>
-        )}
-                    </div>
                     <div>
-                        <button className="btn text-light" style={{padding: "7px 17px"}} id="button1">Search</button>
+                        <button onClick={handleSubmit} className="btn text-light" style={{padding: "10px 17px", fontSize:'18px'}} id="button1">Explore Now</button>
                     </div>
                 </div>
             </div>
@@ -381,8 +255,8 @@ export default function Landing() {
                 <div className="container mt-4">
                     <div className="row mx-auto justify-content-center">
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
-                            <div className="card" style={{width: '20rem', marginRight:'20px', padding:'0'}}>
-                                <Image src="/card1.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
+                            <div className="card" style={{width: '20rem',height:'31rem', marginRight:'20px', padding:'0'}}>
+                                <Image src="/card1.webp" width={300} height={200} className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
                                 <div className="card-body">
                                     <p className="text-secondary mb-0">User Development</p>
                                     <h5 className="card-title"> Website Development Bootcamp</h5>
@@ -396,8 +270,8 @@ export default function Landing() {
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
-                            <div className="card" style={{width: '20rem', marginRight:'20px', padding:'0'}}>
-                                <Image src="/card2.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
+                            <div className="card" style={{width: '20rem',height:'31rem', marginRight:'20px', padding:'0'}}>
+                                <Image src="/card2.webp"width={300} height={200} className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
                                 <div className="card-body">
                                     <p className="text-secondary mb-0">User Experience</p>
                                     <h5 className="card-title"> Digital Marketing Fundamentals</h5>
@@ -411,8 +285,8 @@ export default function Landing() {
                             </div>
                         </div>
                         <div className="col-sm-12 col-md-6 col-lg-4 mb-4">
-                            <div className="card" style={{width: '20rem', marginRight:'20px', padding:'0'}}>
-                                <Image src="/card3.webp" className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
+                            <div className="card" style={{width: '20rem',height:'31rem', marginRight:'20px', padding:'0'}}>
+                                <Image src="/card3.webp" width={300} height={200} className="card-img-top " style={{width: '100%', height: '200px', objectFit: 'cover'}} alt="..."/>
                                 <div className="card-body">
                                     <p className="text-secondary mb-0">User Understanding</p>
                                     <h5 className="card-title"> Data Analytics with Excel & Python</h5>
@@ -431,15 +305,15 @@ export default function Landing() {
         </section>
 
         <section className="About-section" id="about-section">
-        <h1 className="text-light mt-5 text-center" style={{textDecoration:'underline 3px #ffa835'}}>About Us</h1>
+        <h1 className=" mt-5 text-center" style={{textDecoration:'underline 3px #ffa835'}}>About Us</h1>
         <hr className="w-100"/>
         <div className="container">
             <div className="about-section mx-auto mt-5">
                 <div className="about-image">
-                    <Image alt="person2" src="/about1.webp"/>
+                    <Image alt="person2" width={300} height={600} src="/about1.webp"/>
                 </div>
                 <div className="about-content">
-                    <h1 className="font-weight-bolder mt-5 text-white">Learn new skills onlin<span  style={{color:"#ffa835"}}>e with top</span> educators</h1>
+                    <h1 className="font-weight-bolder mt-5 text-dark" >Learn new skills<span style={{color:'#ffa835'}}> online</span> with top<span style={{color:'#ffa835'}}> educators</span></h1>
                     <h6 className="text-muted">Empowering Learning, Everywhere.</h6>
                     <p>At Coursea, we believe that education should be accessible, practical, and inspiring. Our mission is to empower individuals with the skills they need to thrive in today&apos;s ever-evolving world — no matter where they are.<br/><br/>We offer a wide range of expert-led online courses designed to fit around your life. Whether you&apos;re just starting your journey, pivoting to a new career, or upskilling for the future, Coursea is here to guide you every step of the way.</p>
                     <ul className="nav nav-tabs" id="myTab" role="tablist">
@@ -456,8 +330,8 @@ export default function Landing() {
 
                     <div className="tab-content p-3 border border-top-0" id="myTabContent">
                     <div className="tab-pane fade show active" id="active" role="tabpanel" aria-labelledby="active-tab">
-                        At Coursea, our mission is to empower learners through high-quality, flexible education that prepares them for real-world challenges and long-term success.
-                        <br/>Coursea equips learners with the skills and confidence to thrive in real-world careers through flexible, high-quality education.
+                        At EduCourse, our mission is to empower learners through high-quality, flexible education that prepares them for real-world challenges and long-term success.
+                        <br/>EduCourse equips learners with the skills and confidence to thrive in real-world careers through flexible, high-quality education.
                         <li>Delivering job-relevant and practical skills</li>
                         <li>Building learner confidence through expert guidance</li>
                         <li>Equipping individuals with a competitive advantage in today&apos;s digital economy</li>
@@ -470,8 +344,8 @@ export default function Landing() {
                         <li>Build a vibrant, inclusive learning community worldwide</li>
                     </div>
                     <div className="tab-pane fade" id="link2" role="tabpanel" aria-labelledby="link2-tab">
-                    Education should be a right, not a privilege. At Coursea, we exist to eliminate the common barriers to quality learning, making it open, engaging, and accessible for all.
-                        <br/>At Coursea, we believe learning should be accessible to everyone — breaking barriers and making quality education truly inclusive. 
+                    Education should be a right, not a privilege. At EduCourse, we exist to eliminate the common barriers to quality learning, making it open, engaging, and accessible for all.
+                        <br/>At EduCourse, we believe learning should be accessible to everyone — breaking barriers and making quality education truly inclusive. 
                         <li>Make education affordable and flexible</li>
                         <li>Reach learners regardless of location or background</li>
                         <li>Deliver learning experiences that truly transform lives</li>
@@ -571,7 +445,8 @@ export default function Landing() {
                 />
                 <button
                   type="button"
-                  className="btn custom-btn py-2 position-absolute top-0 end-0 mt-2 me-2 text-light" id="button1">
+                  className="btn custom-btn py-2 position-absolute top-0 end-0 mt-2 me-2 text-light" id="button1" onClick={handleClick}>
+                    
                   Explore More
                 </button>
               </div>
