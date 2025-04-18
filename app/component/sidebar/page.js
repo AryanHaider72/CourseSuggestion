@@ -39,7 +39,7 @@ export default function UserLayout({ children }) {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
-  // Check screen size
+  // Detect screen size and toggle mobile mode
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
@@ -53,25 +53,30 @@ export default function UserLayout({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Close dropdowns when clicking outside
+  // Handle outside clicks for dropdowns and sidebar (on mobile)
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        (userDropdownRef.current && !userDropdownRef.current.contains(event.target)) &&
-        (settingsDropdownRef.current && !settingsDropdownRef.current.contains(event.target))
-      ) {
+      const clickedOutsideUser = userDropdownRef.current && !userDropdownRef.current.contains(event.target);
+      const clickedOutsideSettings = settingsDropdownRef.current && !settingsDropdownRef.current.contains(event.target);
+      const clickedOutsideSidebar = sidebarRef.current && !sidebarRef.current.contains(event.target);
+
+      if (clickedOutsideUser && clickedOutsideSettings) {
         setShowUser(false);
         setShowSettings(false);
+      }
+
+      if (isMobile && clickedOutsideSidebar) {
+        setIsSidebarVisible(false);
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [isMobile]);
 
   return (
     <div className="d-flex" style={{ minHeight: '100vh', position: 'relative' }}>
-      
+
       {/* Sidebar */}
       <div
         ref={sidebarRef}

@@ -22,7 +22,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="container my-4" style={{ overflowY: 'auto', height: '450px', scrollbarWidth: 'none' }}>
+    <div className="container my-4" style={{ overflowY: 'auto', minHeight: '80vh', scrollbarWidth: 'none' }}>
       <h2 className="mb-4 text-center ">Admin Dashboard</h2>
       <hr />
 
