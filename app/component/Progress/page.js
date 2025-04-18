@@ -83,8 +83,8 @@ export default function ProgressReport() {
   return (
     <div
       ref={scrollContainerRef}
-      className="container-fluid px-3 py-3"
-      style={{ overflowY: "auto", maxHeight: "80vh", position: "relative" }}
+      className="progress-page-container"
+      style={{overflowY:'scroll'}}
     >
       {/* Title */}
       <h1 className="text-center">Progress Report</h1>
@@ -93,7 +93,7 @@ export default function ProgressReport() {
       {/* User Table */}
       <div className="table-responsive mb-4">
         <table className="table table-bordered table-hover text-center align-middle">
-          <thead style={{backgroundColor:'#ffa835'}}>
+          <thead style={{ backgroundColor: "#ffa835" }}>
             <tr>
               <th>ID</th>
               <th>Name</th>

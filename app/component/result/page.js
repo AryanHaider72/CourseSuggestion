@@ -70,42 +70,49 @@ export default function ResultPage() {
   ];
 
   return (
-    <div ref={scrollContainerRef} style={{ padding: "1rem",overflowY: "auto", maxHeight: "80vh", position: "relative" }}>
+    <div 
+      ref={scrollContainerRef} 
+      className="result-page-container"
+      style={{overflowY:'scroll'}}
+    >
       <h1 className="text-center">Result & Certification</h1>
       <hr className="mt-3 mb-4" />
-      <table className="user-table table table-bordered mb-4">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Course Name</th>
-            <th>Level</th>
-            <th>Progress</th>
-            <th>Action</th>
-            <th>Completion</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.subject}</td>
-              <td>{user.level}</td>
-              <td>{user.progress}</td>
-              <td>
-                <button id="button1" className="btn text-white " onClick={() => handleClick(user)}>
-                  View More
-                </button>
-              </td>
-              <td>
-                <button className="btn btn-warning ms-2 text-white" id="button1"
-                disabled={parseInt(user.progress) !== 100}>
-                Certificate
-                </button>
-              </td>
+
+      {/* Table with Horizontal Scrolling */}
+      <div className="table-responsive" style={{ overflowX: "auto" }}>
+        <table className="user-table table table-bordered mb-4">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Course Name</th>
+              <th>Level</th>
+              <th>Progress</th>
+              <th>Action</th>
+              <th>Completion</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.subject}</td>
+                <td>{user.level}</td>
+                <td>{user.progress}</td>
+                <td>
+                  <button id="button1" className="btn text-white" onClick={() => handleClick(user)}>
+                    View More
+                  </button>
+                </td>
+                <td>
+                  <button className="btn btn-warning ms-2 text-white" id="button1" disabled={parseInt(user.progress) !== 100}>
+                    Certificate
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {userData && (
         <div>
@@ -178,14 +185,13 @@ export default function ResultPage() {
               <p><strong>Last Test Taken:</strong> {userData.lastTest}</p>
               <p><strong>Last Completed Module:</strong> {userData.lastModule}</p>
             </div>
-            
           </div>
         </div>
       )}
 
       {showScroll && (
         <button 
-        id="button1"
+          id="button1"
           onClick={() => {
             if (scrollContainerRef.current) {
               scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });

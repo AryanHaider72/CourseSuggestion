@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { Accordion, Card, button, Container, Row, Col } from 'react-bootstrap';
+import { Accordion, Card, Button, Container, Row, Col } from 'react-bootstrap';
 
 // Sample data for purchased courses
 const courses = [
@@ -25,7 +25,7 @@ const courses = [
   {
     id: 2,
     title: "Python for Data Science",
-    description: "Master Python programming and data science to anyalyize datasets.",
+    description: "Master Python programming and data science to analyze datasets.",
     outline: [
       { week: "Week 1", topics: ["Introduction to Python", "Variables and Data Types", "Control Flow"] },
       { week: "Week 2", topics: ["Functions in Python", "Modules and Packages", "Handling Files"] },
@@ -50,16 +50,20 @@ const PurchasedCourses = () => {
   };
 
   return (
-    <Container style={{ overflowY: 'auto', maxHeight: "80vh" }}>
+    <Container  style={{ overflowY: "scroll", height:'80vh', position: "relative" }}>
       <h1 className="my-4 text-center">Your Purchased Courses</h1>
-      <Row>
+      <Row className="g-4">
         {courses.map((course) => (
-          <Col key={course.id} md={4} className="mb-4">
-            <Card style={{width:'20rem'}}>
+          <Col key={course.id} sm={12} md={6} lg={4}>
+            <Card style={{ width: '100%' }}>
               <Card.Body>
                 <Card.Title>{course.title}</Card.Title>
                 <Card.Text>{course.description}</Card.Text>
-                <button className='btn text-white' id="button1" variant="primary" onClick={() => handleCourseClick(course)}>
+                <button
+                  className='btn text-white'
+                  id='button1'
+                  onClick={() => handleCourseClick(course)}
+                >
                   View Course
                 </button>
               </Card.Body>
@@ -67,15 +71,17 @@ const PurchasedCourses = () => {
           </Col>
         ))}
       </Row>
-      <hr className='mt-4 mb-4'/> 
+      <hr className="mt-4 mb-4" />
 
       {selectedCourse && (
         <div>
           <h2>{selectedCourse.title} - Course Details</h2>
           <p><strong>Introduction:</strong> {selectedCourse.introduction}</p>
           <p><strong>Study Plan:</strong> {selectedCourse.studyPlan}</p>
-          <button className='btn text-white ' id="button1" variant="info" href={selectedCourse.videoLink} target="_blank">Watch Course Videos</button>
-            
+          <button className="btn text-white" id="button1" href={selectedCourse.videoLink} target="_blank">
+            Watch Course Videos
+          </button>
+
           <Accordion className="my-4">
             <Accordion.Item eventKey="0">
               <Accordion.Header>Course Outline</Accordion.Header>

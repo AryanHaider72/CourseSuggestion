@@ -5,6 +5,7 @@
   --foreground: #171717;
 
 }
+
 .background {
   position: relative;
   width: 100%;
@@ -292,6 +293,20 @@ nav {
 
 
 /* Larger devices: 992px to 2105px */
+.result-page-container {
+  height: auto; /* Default height for mobile */
+}
+.progress-page-container {
+  height: auto; /* Default height for mobile */
+}
+@media (min-width: 768px) {
+  .result-page-container {
+    height: 80vh; /* Height for larger screens */
+  }
+  .progress-page-container {
+    height: 80vh; /* Default height for mobile */
+  }
+}
 @media (min-width: 992px) and (max-width: 2105px) {
   .heading {
     width: 450px;

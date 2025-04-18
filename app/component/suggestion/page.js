@@ -49,7 +49,7 @@ const courses = [
 export default function CourseSuggestions() {
   const [active, setactive] = useState('')
   return (
-    <div className="container" style={{ overflowY: "auto", height: "480px", scrollbarWidth: "none", position: "relative" }}>
+    <div className="container" style={{ overflowY: "scroll", height:'80vh', position: "relative" }}>
       <h2 className="text-center mb-3 fw-bold">AI-Recommended Courses</h2>
       <p className="text-center text-muted mb-5">
         Handpicked just for you to level up your learning journey

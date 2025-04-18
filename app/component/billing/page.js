@@ -195,7 +195,7 @@ export default function ManualPaymentPage() {
   );
 
   return (
-    <div className="container" id="container" style={{ overflowY: "auto", maxHeight: "80vh", position: "relative" }}>
+    <div className="container" id="container" style={{ overflowY: "scroll", maxHeight: "100vh", position: "relative" }}>
       
       <h1 className="text-center">Complete Enrollment</h1>
       <hr/>

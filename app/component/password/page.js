@@ -21,7 +21,7 @@ export default function ChangePassword() {
   };
 
   return (
-    <div className="container p-3 d-flex justify-content-center align-items-center  bg-body-tertiary">
+    <div className="container p-3 d-flex justify-content-center align-items-center  bg-body-tertiary" style={{overflowY:'scroll'}}>
       <div className="card shadow-sm p-5" >
         <div className="text-center mb-4">
           <KeyRound size={40}color='#ffa835' className=" mb-2" />
