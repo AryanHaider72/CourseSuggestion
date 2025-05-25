@@ -19,7 +19,7 @@ export default function Signup(){
       setmessage("Password Matched");
       setMessageColor('success');
     try {
-      const res = await axios.post(" http://localhost:8080/register", {
+      const res = await axios.post(" https://server-production-1573.up.railway.app//register", {
         username: username,
         email: useremail,
         password: userpass,
