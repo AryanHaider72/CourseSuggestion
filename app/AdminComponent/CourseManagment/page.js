@@ -21,8 +21,8 @@ const CourseManagement = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.post(
-          ' /AdminComponent/CourseManagment',
+        const response = await axios.get(
+          'https://coursesuggestion-production.up.railway.app/AdminComponent/CourseManagment',
           {},
           { withCredentials: true }
         );

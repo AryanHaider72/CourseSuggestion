@@ -17,7 +17,7 @@ app.use(cookieParser());
 // CORS configuration
 app.use(cors({
     origin: 'https://coursesuggestion-production.up.railway.app', // Your frontend's URL
-    credentials: true, // Ensure cookies are sent with requests
+    credentials: true, 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -87,7 +87,7 @@ app.get('/component/sidebar', authMiddleware, (req, res) => {
 
 
 // Login route
-app.post('/login', (req, res) => {
+app.get('/login', (req, res) => {
     const { email, password } = req.body;
 
     // Check for admin login
@@ -144,7 +144,7 @@ app.post('/login', (req, res) => {
 
 
 // Register route
-app.post('/register', (req, res) => {
+app.get('/register', (req, res) => {
     const { username, email, password } = req.body;
 
     // Hash the password
@@ -176,7 +176,7 @@ app.post('/register', (req, res) => {
 });
 
 // Dashboard route with user results (authentication required)
-app.post('/component/Dashboard', authMiddleware, (req, res) => {
+app.get('/component/Dashboard', authMiddleware, (req, res) => {
     const resultinfo = req.session.user;
   
     if (!resultinfo) {
@@ -235,7 +235,7 @@ app.post('/component/Dashboard', authMiddleware, (req, res) => {
   });
   
 // Suggestion course navigation Routes
-app.post('/component/suggestion', authMiddleware, (req,res)=>{
+app.get('/component/suggestion', authMiddleware, (req,res)=>{
     const suggest= req.session.user;
     if(!suggest){
         return res.status(401).send('User Not Logged In');
@@ -263,7 +263,7 @@ app.post('/component/suggestion', authMiddleware, (req,res)=>{
 })
 
 //Billing & Payment records Database
-app.post('/component/billing', authMiddleware, (req,res)=>{
+app.get('/component/billing', authMiddleware, (req,res)=>{
     const billing = req.session.user;
     if(!billing){
         return res.status(401).send('User Not Logged in');
@@ -286,7 +286,7 @@ app.post('/component/billing', authMiddleware, (req,res)=>{
 
 
 // Progress route (fetch user progress)
-app.post('/component/Progress', authMiddleware, (req, res) => {
+app.get('/component/Progress', authMiddleware, (req, res) => {
     const progress = req.session.user;
 
     if (!progress) {
@@ -327,7 +327,7 @@ app.post('/component/Progress', authMiddleware, (req, res) => {
 });
 
 //List of Purchased Courses
-app.post('/component/Purchased', authMiddleware, (req,res)=>{
+app.get('/component/Purchased', authMiddleware, (req,res)=>{
     const Purchased = req.session.user;
     if(!Purchased){
         return res.status(401).send('User Not Logged In');
@@ -350,7 +350,7 @@ app.post('/component/Purchased', authMiddleware, (req,res)=>{
 
 
 //Status Updating 
-app.post('/AdminComponent/UpdatePaymentStatus', authMiddleware, (req, res) => {
+app.get('/AdminComponent/UpdatePaymentStatus', authMiddleware, (req, res) => {
     const { id, status } = req.body;
     if (!id || !status) return res.status(400).send('Missing fields');
     db.query("UPDATE payment_data SET status = ? WHERE id = ?", [status, id], (err) => {
@@ -360,7 +360,7 @@ app.post('/AdminComponent/UpdatePaymentStatus', authMiddleware, (req, res) => {
   });
 
   // Admin Component for CoursManagment
-app.post('/AdminComponent/CourseManagment', authMiddleware , (req,res)=>{
+app.get('/AdminComponent/CourseManagment', authMiddleware , (req,res)=>{
     const method = req.session.user;
     if(!method){
         return res.status(401).send('User not Logged');
@@ -378,7 +378,7 @@ app.post('/AdminComponent/CourseManagment', authMiddleware , (req,res)=>{
     })
 })
 // Admin Billing & Payments
-app.post('/AdminComponent/BillingPayment', authMiddleware, (req, res) => {
+app.get('/AdminComponent/BillingPayment', authMiddleware, (req, res) => {
     const method = req.session.user;
     if(!method){
         return res.status(401).send('User not Logged');
@@ -392,7 +392,7 @@ app.post('/AdminComponent/BillingPayment', authMiddleware, (req, res) => {
   });
 
 //User Count
-app.post('/AdminComponent/totalUsers', authMiddleware,(req,res)=>{
+app.get('/AdminComponent/totalUsers', authMiddleware,(req,res)=>{
     const total = req.session.user;
     if(!total){
         return res.status(401).send('user Not Logged');
@@ -405,7 +405,7 @@ app.post('/AdminComponent/totalUsers', authMiddleware,(req,res)=>{
         res.status(200).send(result.length);
     })
 })
-app.post('/AdminComponent/totalamount', authMiddleware,(req,res)=>{
+app.get('/AdminComponent/totalamount', authMiddleware,(req,res)=>{
     const total = req.session.user;
     if(!total){
         return res.status(401).send('user Not Logged');
@@ -418,7 +418,7 @@ app.post('/AdminComponent/totalamount', authMiddleware,(req,res)=>{
         res.status(200).send(result.length * 500);
     })
 })
-app.post('/AdminComponent/totalcourses', authMiddleware,(req,res)=>{
+app.get('/AdminComponent/totalcourses', authMiddleware,(req,res)=>{
     const total = req.session.user;
     if(!total){
         return res.status(401).send('user Not Logged');
@@ -437,7 +437,7 @@ app.post('/AdminComponent/totalcourses', authMiddleware,(req,res)=>{
 
 
 // Update user settings
-app.post('/component/setting', authMiddleware, (req, res) => {
+app.get('/component/setting', authMiddleware, (req, res) => {
     const { name, phoneNumber, country, province, city, street } = req.body;
     const updateUser = req.session.user;
 
@@ -473,7 +473,7 @@ app.post('/component/setting', authMiddleware, (req, res) => {
 
 
 // Update user settings
-app.post('/component/Updating_user', authMiddleware, (req, res) => {
+app.get('/component/Updating_user', authMiddleware, (req, res) => {
     const updateUser = req.session.user;
   
     if (!updateUser) {
@@ -517,7 +517,7 @@ app.post('/component/Updating_user', authMiddleware, (req, res) => {
 
 
 // Route for receiving payment form
-app.post('/component/submitPayment', upload.single('receipt'), (req, res) => {
+app.get('/component/submitPayment', upload.single('receipt'), (req, res) => {
     const Payment = req.session.user;
     if (!Payment) {
       return res.status(401).send("User Not Logged in");
@@ -542,7 +542,7 @@ app.post('/component/submitPayment', upload.single('receipt'), (req, res) => {
   });
   
 // Admin Component for User managment 
-app.post('/AdminComponent/UserManagment', authMiddleware, (req, res) => {
+app.get('/AdminComponent/UserManagment', authMiddleware, (req, res) => {
     const manage = req.session.user;
     
     if (!manage) {
@@ -565,7 +565,7 @@ app.post('/AdminComponent/UserManagment', authMiddleware, (req, res) => {
 
 
 // Password Changing
-app.post('/api/change-password', async (req, res) => {
+app.get('/api/change-password', async (req, res) => {
     const { currentPassword, newPassword } = req.body;
     const updateUser = req.session.user;
 
@@ -620,7 +620,7 @@ app.get("/get-session", (req, res) => {
 });
 
 // Logout route
-app.post("/component/logout", (req, res) => {
+app.get("/component/logout", (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).json({ message: "Error logging out" });

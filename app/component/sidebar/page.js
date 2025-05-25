@@ -73,8 +73,8 @@ const handleSendMessage = async (e) => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
-        " /component/logout",
+      const response = await axios.get(
+        "https://coursesuggestion-production.up.railway.app/component/logout",
         {}, // Empty body
         {
           withCredentials: true, // ✅ This is the correct place

@@ -19,12 +19,12 @@ export default function Login(){
           e.preventDefault(); // ✅ prevents the form from doing GET request
       
           try {
-            const res = await axios.post('/login',
+            const res = await axios.get('https://coursesuggestion-production.up.railway.app/login',
               {
               email: useremail,
               password: userpass
             }, {
-              withCredentials: 'include',
+              withCredentials: true,
               headers: {
                   'Content-Type': 'application/json',
               }

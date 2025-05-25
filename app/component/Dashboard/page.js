@@ -168,7 +168,7 @@ const MCQQuizWithSearch = () => {
     const checkauth =async () =>{
     try{
     const res = await axios.get(
-      " /component/sidebar",{},{
+      "https://coursesuggestion-production.up.railway.app/component/sidebar",{},{
         withCredentials: true,
       })
       if(res.status==200){
@@ -188,7 +188,7 @@ const MCQQuizWithSearch = () => {
     if (score == null || endDateTime == null) return;
 
     try {
-      const res = await axios.post(
+      const res = await axios.get(
         " /component/Dashboard",
         {
           name: Name,

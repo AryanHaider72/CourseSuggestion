@@ -10,8 +10,8 @@ const BillingAndPayments = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.post(
-          ' /component/billing',
+        const response = await axios.get(
+          'https://coursesuggestion-production.up.railway.app/component/billing',
           {},
           { withCredentials: true }
         );

@@ -25,7 +25,7 @@ export default function ChangePassword() {
 
     try {
       // Send API request to backend for password change
-      const response = await axios.post(' /api/change-password', {
+      const response = await axios.get('https://coursesuggestion-production.up.railway.app/api/change-password', {
         currentPassword,
         newPassword,
         confirmPassword
