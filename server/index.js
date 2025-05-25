@@ -87,7 +87,7 @@ app.get('/component/sidebar', authMiddleware, (req, res) => {
 
 
 // Login routes
-app.post('/login', (req, res) => {
+app.get('/login', (req, res) => {
     const { email, password } = req.body;
 
     // Check for admin login
