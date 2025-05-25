@@ -165,7 +165,7 @@ export default function SubmitPayment() {
     formData.append('receipt', receipt);
 
     try {
-      const res = await axios.post('https://server-production-1573.up.railway.app//component/submitPayment', formData, {
+      const res = await axios.post('https://server-production-1573.up.railway.app/component/submitPayment', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

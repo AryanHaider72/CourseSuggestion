@@ -20,7 +20,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const totalUsers = async () => {
       try {
-        const res = await axios.post('https://server-production-1573.up.railway.app//AdminComponent/totalUsers', {}, { withCredentials: true });
+        const res = await axios.post('https://server-production-1573.up.railway.app/AdminComponent/totalUsers', {}, { withCredentials: true });
         if (res.status === 200) setUser(res.data);
       } catch (err) {
         if (err.response?.status === 401) {
@@ -36,7 +36,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const totalAmount = async () => {
       try {
-        const res = await axios.post('https://server-production-1573.up.railway.app//AdminComponent/totalamount', {}, { withCredentials: true });
+        const res = await axios.post('https://server-production-1573.up.railway.app/AdminComponent/totalamount', {}, { withCredentials: true });
         if (res.status === 200) setPayment(res.data);
       } catch (err) {
         console.error('Error fetching payments:', err.response?.data || err.message);
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const totalCourses = async () => {
       try {
-        const res = await axios.post('https://server-production-1573.up.railway.app//AdminComponent/totalcourses', {}, { withCredentials: true });
+        const res = await axios.post('https://server-production-1573.up.railway.app/AdminComponent/totalcourses', {}, { withCredentials: true });
         if (res.status === 200) setCourse(res.data);
       } catch (err) {
         console.error('Error fetching courses:', err.response?.data || err.message);
@@ -60,7 +60,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const res = await axios.post('https://server-production-1573.up.railway.app//AdminComponent/BillingPayment', {}, { withCredentials: true });
+        const res = await axios.post('https://server-production-1573.up.railway.app/AdminComponent/BillingPayment', {}, { withCredentials: true });
         if (res.status === 200) setPayments(res.data);
       } catch (err) {
         console.error('Error fetching payments:', err.response?.data || err.message);

@@ -24,7 +24,7 @@ export default function SettingsPage() {
   const updatefunction = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://server-production-1573.up.railway.app//AdminComponent/setting", {
+      const res = await axios.post("https://server-production-1573.up.railway.app/AdminComponent/setting", {
         name: newName,
         phoneNumber,
         country,

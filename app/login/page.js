@@ -19,7 +19,7 @@ export default function Login(){
           e.preventDefault(); // ✅ prevents the form from doing GET request
       
           try {
-            const res = await axios.post('https://server-production-1573.up.railway.app//login',
+            const res = await axios.post('https://server-production-1573.up.railway.app/login',
               {
               email: useremail,
               password: userpass

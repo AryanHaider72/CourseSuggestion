@@ -15,7 +15,7 @@ const UserManagement = () => {
   useEffect(() => {
     const showUser = async () => {
       try {
-        const response = await axios.post('https://server-production-1573.up.railway.app//AdminComponent/UserManagment', {}, { withCredentials: true });
+        const response = await axios.post('https://server-production-1573.up.railway.app/AdminComponent/UserManagment', {}, { withCredentials: true });
         if (response.status === 200) {
           console.log(response.data);
           setUsers(response.data); 

@@ -22,7 +22,7 @@ const CourseManagement = () => {
     const fetchCourses = async () => {
       try {
         const response = await axios.post(
-          'https://server-production-1573.up.railway.app//AdminComponent/CourseManagment',
+          'https://server-production-1573.up.railway.app/AdminComponent/CourseManagment',
           {},
           { withCredentials: true }
         );

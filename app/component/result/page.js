@@ -15,7 +15,7 @@ export default function ProgressReport() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('https://server-production-1573.up.railway.app//component/Progress', {}, {
+        const response = await axios.post('https://server-production-1573.up.railway.app/component/Progress', {}, {
           withCredentials: true, // Send session cookie along
         });
 
