@@ -12,7 +12,7 @@ const BillingAndPayments = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const res = await axios.post('http://localhost:8080/AdminComponent/BillingPayment', {}, { withCredentials: true });
+        const res = await axios.post(' /AdminComponent/BillingPayment', {}, { withCredentials: true });
         if (res.status === 200) setPayments(res.data);
       } catch (err) {
         console.error('Error fetching payments:', err.response?.data || err.message);
@@ -24,7 +24,7 @@ const BillingAndPayments = () => {
   const handleStatusUpdate = async (id, status) => {
     setUpdatingId(id);
     try {
-      const res = await axios.post('http://localhost:8080/AdminComponent/UpdatePaymentStatus', { id, status }, { withCredentials: true });
+      const res = await axios.post(' /AdminComponent/UpdatePaymentStatus', { id, status }, { withCredentials: true });
       if (res.status === 200) {
         setPayments((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
       }
@@ -85,7 +85,7 @@ const BillingAndPayments = () => {
                             variant="outline-primary"
                             onClick={() => {
                               const imageName = payment.image.replace(/^uploads\//, '');
-                              window.open(`http://localhost:8080/${imageName}`, '_blank');
+                              window.open(` /${imageName}`, '_blank');
                             }}
                           >
                             View Image

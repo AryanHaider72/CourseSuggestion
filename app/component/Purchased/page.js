@@ -14,7 +14,7 @@ const PurchasedCourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.post('http://localhost:8080/component/Purchased', {}, {
+        const response = await axios.post(' /component/Purchased', {}, {
           withCredentials: true,
         });
 

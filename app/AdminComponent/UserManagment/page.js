@@ -15,7 +15,7 @@ const UserManagement = () => {
   useEffect(() => {
     const showUser = async () => {
       try {
-        const response = await axios.post('http://localhost:8080/AdminComponent/UserManagment', {}, { withCredentials: true });
+        const response = await axios.post(' /AdminComponent/UserManagment', {}, { withCredentials: true });
         if (response.status === 200) {
           console.log(response.data);
           setUsers(response.data); 

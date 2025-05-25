@@ -20,7 +20,7 @@ export default function SettingsPage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.post("http://localhost:8080/component/Updating_user", {}, {
+        const res = await axios.post(" /component/Updating_user", {}, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -53,7 +53,7 @@ export default function SettingsPage() {
   const updatefunction = async (e) => {
     e.preventDefault();
     try {
-        const response = await axios.post("http://localhost:8080/component/setting", {
+        const response = await axios.post(" /component/setting", {
             name: newName,
             phoneNumber: phoneNumber,
             country: country,

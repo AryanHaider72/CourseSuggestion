@@ -16,7 +16,7 @@ export default function CourseSuggestions() {
   useEffect(()=>{
     const suggestCourses = async ()=>{
       try{
-        const response = await axios.post('http://localhost:8080/component/suggestion',{}, {
+        const response = await axios.post(' /component/suggestion',{}, {
           withCredentials: true,
         });
       if(response.status === 200){

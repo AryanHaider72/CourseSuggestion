@@ -11,7 +11,7 @@ const BillingAndPayments = () => {
     const fetchPayments = async () => {
       try {
         const response = await axios.post(
-          'http://localhost:8080/component/billing',
+          ' /component/billing',
           {},
           { withCredentials: true }
         );

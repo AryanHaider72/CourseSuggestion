@@ -165,7 +165,7 @@ export default function SubmitPayment() {
     formData.append('receipt', receipt);
 
     try {
-      const res = await axios.post('http://localhost:8080/component/submitPayment', formData, {
+      const res = await axios.post(' /component/submitPayment', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true,
       });

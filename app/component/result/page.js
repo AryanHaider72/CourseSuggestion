@@ -15,7 +15,7 @@ export default function ProgressReport() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://localhost:8080/component/Progress', {}, {
+        const response = await axios.post(' /component/Progress', {}, {
           withCredentials: true, // Send session cookie along
         });
 
