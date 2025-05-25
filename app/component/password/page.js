@@ -1,35 +1,63 @@
 'use client';
 import { useState } from 'react';
 import { KeyRound } from 'lucide-react';
+import axios from 'axios'; // Add axios for making API requests
 
 export default function ChangePassword() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false); // For loading spinner
 
-  const handleChangePassword = (e) => {
+  const handleChangePassword = async (e) => {
     e.preventDefault();
 
+    // Check if new passwords match
     if (newPassword !== confirmPassword) {
       setMessage('New passwords do not match.');
       return;
     }
 
-    // TODO: Add actual API logic here
-    setMessage('Password changed successfully!');
+    // Start loading
+    setLoading(true);
+    setMessage('');
+
+    try {
+      // Send API request to backend for password change
+      const response = await axios.post('http://localhost:3001/api/change-password', {
+        currentPassword,
+        newPassword,
+        confirmPassword
+      },{ withCredentials: true });
+
+      // If successful, show success message
+      setMessage(response.data.message);
+    } catch (error) {
+      // Handle errors from the API
+      if (error.response) {
+        // If error response exists (backend error)
+        setMessage(error.response.data.message || 'Something went wrong');
+      } else {
+        // If no response from the server (e.g., network issues)
+        setMessage('Network error. Please try again later.');
+      }
+    } finally {
+      // Stop loading
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container p-3 d-flex justify-content-center align-items-center  bg-body-tertiary" style={{overflowY:'scroll'}}>
-      <div className="card shadow-sm p-5" >
+    <div className="container p-3 d-flex justify-content-center align-items-center bg-body-tertiary">
+      <div className="card shadow-sm p-5">
         <div className="text-center mb-4">
-          <KeyRound size={40}color='#ffa835' className=" mb-2" />
+          <KeyRound size={40} color='#ffa835' className="mb-2" />
           <h4 className="fw-bold">Change Password</h4>
           <p className="text-muted small mb-0">Keep your account safe by using a strong password.</p>
         </div>
 
-        <form onSubmit={handleChangePassword} >
+        <form onSubmit={handleChangePassword}>
           <div className="mb-3">
             <label htmlFor="currentPassword" className="form-label">Current Password</label>
             <input
@@ -66,14 +94,16 @@ export default function ChangePassword() {
             />
           </div>
 
+          {/* Display the response message (success or error) */}
           {message && (
             <div className={`alert ${message.includes('successfully') ? 'alert-success' : 'alert-danger'}`} role="alert">
               {message}
             </div>
           )}
 
-          <button type="submit" className="btn text-white w-100 rounded-pill" id='button1'>
-            Update Password
+          {/* Submit Button */}
+          <button type="submit" className="btn text-white w-100 rounded-pill" id='button1' disabled={loading}>
+            {loading ? 'Updating...' : 'Update Password'}
           </button>
         </form>
       </div>

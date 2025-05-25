@@ -1,20 +1,44 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { ProgressBar } from "react-bootstrap";
-import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, Legend, ResponsiveContainer } from "recharts";
+
 import { ChevronUp } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
-const users = [
-  { id: "1", subject: "C++ Programming", level: "Intermediate", progress: "73%" },
-  { id: "2", subject: "Web Development", level: "Beginner", progress: "100%" },
-  { id: "3", subject: "Python Data Analyst", level: "Master", progress: "55%" },
-];
-
-export default function ResultPage() {
+export default function ProgressReport() {
+  const [users, setUsers] = useState([]);
   const [userData, setUserData] = useState(null);
+  const [mcqs, setMcqs] = useState([]);
   const [showScroll, setShowScroll] = useState(false);
   const scrollContainerRef = useRef(null);
 
+  // Fetch data from backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://localhost:3001/component/Progress', {}, {
+          withCredentials: true, // Send session cookie along
+        });
+
+        if (response.status === 200) {
+          const { progress, questions } = response.data.data;
+          setUsers(progress);  // Set users' progress data
+          setMcqs(questions); 
+          console.log(questions);
+        }
+      } catch (error) {
+        if (error.response?.status === 401) {
+          console.log("User not logged in", error);
+        } else {
+          alert("Database Error");
+          console.log(error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Handle scrolling to show the button
   useEffect(() => {
     const handleScroll = () => {
       if (scrollContainerRef.current) {
@@ -34,78 +58,57 @@ export default function ResultPage() {
     };
   }, []);
 
+  // Handle user click to show detailed report
   const handleClick = (user) => {
+    const topicsMastered = JSON.parse(user.good || '[]');
+    const areasToImprove = JSON.parse(user.improvement || '[]');
+    const courseSuggestions = JSON.parse(user.courseSuggestions || '[]');
     setUserData({
-      name: "John Doe", // Hardcoded as original user object lacks name
-      email: "john@example.com",
+      name: user.name,
       course: user.subject,
       level: user.level,
-      progress: parseInt(user.progress), // Fix: change from user.percent
-      mcqsAttempted: 120,
-      accuracy: 82,
-      avgScore: 76,
-      topicsMastered: ["HTML", "CSS", "JavaScript"],
-      areasToImprove: ["React", "Testing"],
-      lastLogin: "2025-04-12",
-      lastTest: "React Basics Quiz",
-      lastModule: "API Integration",
+      progress: parseInt(user.percent),
+      TotalMCqs: user.TotalMCqs || 5,
+      accuracy: user.percent || 82,
+      topicsMastered: topicsMastered,
+      areasToImprove: areasToImprove,
+      courseSuggestions: courseSuggestions,
+      start: user.start,
+      end: user.end,
     });
   };
 
-  const COLORS = ["#00C49F", "#FF8042"];
-
-  const pieData = userData
-    ? [
-        { name: "Correct", value: userData.accuracy },
-        { name: "Incorrect", value: 100 - userData.accuracy },
-      ]
-    : [];
-
-  const barData = [
-    { topic: "HTML", score: 90 },
-    { topic: "CSS", score: 85 },
-    { topic: "JavaScript", score: 88 },
-    { topic: "React", score: 60 },
-    { topic: "Testing", score: 55 },
-  ];
-
   return (
-    <div 
-      ref={scrollContainerRef} 
-      className="result-page-container"
-      style={{overflowY:'scroll'}}
-    >
-      <h1 className="text-center">Result & Certification</h1>
+    <div ref={scrollContainerRef} className="progress-page-container" style={{ overflowY: 'scroll' }}>
+      <h1 className="text-center">Progress Report</h1>
       <hr className="mt-3 mb-4" />
 
-      {/* Table with Horizontal Scrolling */}
-      <div className="table-responsive" style={{ overflowX: "auto" }}>
-        <table className="user-table table table-bordered mb-4">
-          <thead>
+      {/* User Table */}
+      <div className="table-responsive mb-4">
+        <table className="table table-bordered table-hover text-center align-middle">
+          <thead style={{ backgroundColor: "#ffa835" }}>
             <tr>
               <th>ID</th>
-              <th>Course Name</th>
+              <th>Subject</th>
               <th>Level</th>
-              <th>Progress</th>
+              <th>Percentage</th>
               <th>Action</th>
-              <th>Completion</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user, index) => (
               <tr key={user.id}>
-                <td>{user.id}</td>
+                <td>{index + 1}</td>
                 <td>{user.subject}</td>
                 <td>{user.level}</td>
-                <td>{user.progress}</td>
+                <td>{user.percent}</td>
                 <td>
-                  <button id="button1" className="btn text-white" onClick={() => handleClick(user)}>
+                  <button
+                    className="btn text-white"
+                    id="button1"
+                    onClick={() => handleClick(user)}
+                  >
                     View More
-                  </button>
-                </td>
-                <td>
-                  <button className="btn btn-warning ms-2 text-white" id="button1" disabled={parseInt(user.progress) !== 100}>
-                    Certificate
                   </button>
                 </td>
               </tr>
@@ -114,91 +117,97 @@ export default function ResultPage() {
         </table>
       </div>
 
+      {/* Report Section */}
       {userData && (
-        <div>
+        <>
           <h2 className="mb-4 text-center">Report Analysis</h2>
 
-          <div className="card mb-4 shadow-sm">
+          {/* User Summary */}
+          <div className="card mb-4 shadow-sm p-3">
             <div className="card-body">
-              <h5>User Summary</h5>
-              <p><strong>Name:</strong> {userData.name}</p>
-              <p><strong>Email:</strong> {userData.email}</p>
+              <h5 className="text-center text-md-start">User Summary</h5>
+              <p><strong>Name: </strong>{userData.name}</p>
               <p><strong>Course:</strong> {userData.course}</p>
               <p><strong>Level:</strong> {userData.level}</p>
             </div>
           </div>
 
-          <div className="card mb-4 shadow-sm">
+          {/* MCQ Performance */}
+          <div className="card mb-4 shadow-sm p-3">
             <div className="card-body">
-              <h5>Course Progress</h5>
-              <ProgressBar now={userData.progress} label={`${userData.progress}%`} />
-            </div>
-          </div>
-
-          <div className="card mb-4 shadow-sm">
-            <div className="card-body">
-              <h5>MCQ/Test Performance</h5>
+              <h5 className="text-center text-md-start">MCQ/Test Performance</h5>
               <table className="table table-bordered mt-3">
                 <tbody>
-                  <tr><th>Total MCQs Attempted</th><td>{userData.mcqsAttempted}</td></tr>
+                  <tr><th>Total MCQs Attempted</th><td>{userData.TotalMCqs}</td></tr>
                   <tr><th>Accuracy</th><td>{userData.accuracy}%</td></tr>
-                  <tr><th>Average Score</th><td>{userData.avgScore}%</td></tr>
                   <tr><th>Topics Mastered</th><td>{userData.topicsMastered.join(", ")}</td></tr>
-                  <tr><th>Areas to Improve</th><td>{userData.areasToImprove.join(", ")}</td></tr>
+                  <tr><th>Areas to Improve</th><td>{Array.isArray(userData.areasToImprove) ? userData.areasToImprove.join(", ") : "No data"}</td></tr>
                 </tbody>
               </table>
-
-              <div className="row mt-4">
-                <div className="col-md-6">
-                  <h6>Accuracy Breakdown</h6>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                      <Pie dataKey="value" data={pieData} cx="50%" cy="50%" outerRadius={80} label>
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="col-md-6">
-                  <h6>Scores by Topic</h6>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <BarChart data={barData}>
-                      <XAxis dataKey="topic" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="score" fill="#ffa835" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
             </div>
           </div>
 
-          <div className="card shadow-sm">
+          {/* MCQs Analysis */}
+          <div className="card mb-4 shadow-sm p-3" style={{overflowX:'scroll',maxWidth:'80vw'}}>
             <div className="card-body">
-              <h5>Last Activity</h5>
-              <p><strong>Last Login:</strong> {userData.lastLogin}</p>
-              <p><strong>Last Test Taken:</strong> {userData.lastTest}</p>
-              <p><strong>Last Completed Module:</strong> {userData.lastModule}</p>
+              <h5 className="text-center text-md-start">MCQ/Test Analysis</h5>
+              <table className="table table-bordered mt-3">
+                <tbody>
+                  <tr>
+                    <td className="fs-5 fw-bold">ID</td>
+                    <td className="fs-5 fw-bold">Question</td>
+                    <td className="fs-5 fw-bold">Option 1</td>
+                    <td className="fs-5 fw-bold">Option 2</td>
+                    <td className="fs-5 fw-bold">Option 3</td>
+                    <td className="fs-5 fw-bold">Option 4</td>
+                    <td className="fs-5 fw-bold">Selected Option</td>
+                    <td className="fs-5 fw-bold">Correct Option</td>
+                  </tr>
+                  {mcqs.map((mcq, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{mcq.question}</td>
+                      <td>{mcq.option1}</td>
+                      <td>{mcq.option2}</td>
+                      <td>{mcq.option3}</td>
+                      <td>{mcq.option4}</td>
+                      <td>{mcq.selectedoption}</td>
+                      <td>{mcq.correctoption}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
+
+          {/* Last Activity */}
+          <div className="card shadow-sm p-3 mb-4">
+            <div className="card-body">
+              <h5 className="text-center text-md-start">Last Activity</h5>
+              <p><strong>Test Started: </strong>{new Date(userData.start).toLocaleString()}</p>
+              <p><strong>Test Ended: </strong>{new Date(userData.end).toLocaleString()}</p>
+            </div>
+          </div>
+        </>
       )}
 
+      {/* Scroll To Top Button */}
       {showScroll && (
-        <button 
-          id="button1"
+        <button
           onClick={() => {
             if (scrollContainerRef.current) {
               scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
             }
           }}
-          className="btn text-white position-fixed"
-          style={{ bottom: "20px", right: "20px", zIndex: 1000 }}
+          id="button1"
+          className="btn position-fixed bg-dark"
+          style={{
+            bottom: "20px",
+            right: "20px",
+            zIndex: 1000,
+            padding: "10px",
+            borderRadius: "50%",
+          }}
         >
           <ChevronUp color="white" />
         </button>

@@ -2,14 +2,13 @@
 import { useState, useEffect } from 'react';
 import { Button, Form, Row, Col, Image } from 'react-bootstrap';
 import { FaCamera } from 'react-icons/fa';
+import axios from 'axios';
 
 export default function SettingsPage() {
-  const [ userName, setUserName ] = useState();
-  const [newName, setNewName] = useState(userName);
-  const [newEmail, setNewEmail] = useState('john@example.com');
-  const [newPassword, setNewPassword] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newEmail, setNewEmail] = useState('admin@gmail.com');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [profilePhoto, setProfilePhoto] = useState(null);
+
 
   // Address fields
   const [country, setCountry] = useState('');
@@ -22,7 +21,40 @@ export default function SettingsPage() {
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
 
-  // Fetch the list of countries using Gemini API or any other relevant API
+  const updatefunction = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:3001/AdminComponent/setting", {
+        name: newName,
+        phoneNumber,
+        country,
+        province,
+        city,
+        street,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true
+      }
+    );
+    console.log(res.data);
+    setNewEmail(res.data.email);
+      if (res.status === 200) {
+        console.log(res.data.message);
+        alert('Profile settings updated successfully!');
+        console.log(res.data.message);
+      }
+    } catch (err) {
+      if (err.response?.status === 401) {
+        alert("Session Expired Log in Again to continue");
+        router.push('/login');
+      } else {
+        console.error(err);
+      }
+    }
+  };
+
   const fetchCountries = async () => {
     try {
       const response = await fetch(
@@ -147,7 +179,6 @@ export default function SettingsPage() {
   // Handle profile save
   const handleProfileSave = (e) => {
     e.preventDefault();
-    setUserName(newName);
     alert('Profile updated successfully!');
   };
 
@@ -179,53 +210,13 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <div className="container py-2" style={{ overflowY: 'auto', height: '500px', scrollbarWidth: 'none' }}>
+    <div className="container py-2" style={{ overflowY: 'auto', height: '650px', scrollbarWidth: 'none' }}>
       <h2 className="mb-4 text-center">Settings</h2>
 
       <div className="card mb-4 shadow-sm">
         <div className="card-body">
           <h5>Edit Profile</h5>
           <Form onSubmit={handleProfileSave}>
-            {/* Profile Picture */}
-            <Row className="mb-4 justify-content-center">
-              <Col xs="auto">
-                <div className="position-relative">
-                  {profilePhoto ? (
-                    <Image src={profilePhoto} alt="Profile" width={150} height={150} roundedCircle />
-                  ) : (
-                    <div
-                      style={{
-                        width: '150px',
-                        height: '150px',
-                        backgroundColor: '#ccc',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: 'white',
-                      }}
-                    >
-                      <FaCamera size={50} />
-                    </div>
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfilePictureChange}
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      right: 0,
-                      opacity: 0,
-                      width: '100%',
-                      height: '100%',
-                      cursor: 'pointer',
-                    }}
-                  />
-                </div>
-                <p className="mt-2 text-center">Change Profile Picture</p>
-              </Col>
-            </Row>
 
             {/* Name & Email */}
             <Row className="mb-3">
@@ -323,7 +314,7 @@ export default function SettingsPage() {
               </Col>
             </Row>
 
-            <button className='btn text-white'id='button1' type="submit">Save Profile</button>
+            <button className='btn text-white'id='button1' type="submit" onClick={updatefunction}>Save Profile</button>
           </Form>
         </div>
       </div>

@@ -1,127 +1,138 @@
-'use client';
-import React, { useState } from 'react';
-import { Table, Button, Card, Form, InputGroup, Modal, Badge } from 'react-bootstrap';
-import { CheckCircle, FileText } from 'lucide-react';
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Table, Button, Card, Form, InputGroup, Badge, Spinner } from 'react-bootstrap';
+import { CheckCircle, XCircle } from 'lucide-react';
+import {useRouter} from 'next/navigation';
 const BillingAndPayments = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [receiptImage, setReceiptImage] = useState(null);
+  const [payments, setPayments] = useState([]);
+  const [updatingId, setUpdatingId] = useState(null);
+  const router = useRouter();
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        const res = await axios.post('http://localhost:3001/AdminComponent/BillingPayment', {}, { withCredentials: true });
+        if (res.status === 200) setPayments(res.data);
+      } catch (err) {
+        console.error('Error fetching payments:', err.response?.data || err.message);
+      }
+    };
+    fetchPayments();
+  }, []);
 
-  const payments = [
-    {
-      id: 1,
-      user: 'Ali Raza',
-      method: 'Bank Transfer',
-      amount: 5000,
-      status: 'pending',
-      date: '2024-04-10',
-    },
-    {
-      id: 2,
-      user: 'Fatima Khan',
-      method: 'Easypaisa',
-      amount: 3500,
-      status: 'completed',
-      date: '2024-04-09',
-    },
-    {
-      id: 3,
-      user: 'Usman Tariq',
-      method: 'Bank Transfer',
-      amount: 7000,
-      status: 'pending',
-      date: '2024-04-11',
-    },
-  ];
+  const handleStatusUpdate = async (id, status) => {
+    setUpdatingId(id);
+    try {
+      const res = await axios.post('http://localhost:3001/AdminComponent/UpdatePaymentStatus', { id, status }, { withCredentials: true });
+      if (res.status === 200) {
+        setPayments((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
+      }
+    } catch (err) {
+      console.error('Failed to update status:', err.response?.data || err.message);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
 
   const filteredPayments = payments.filter(
     (p) =>
-      p.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.method.toLowerCase().includes(searchTerm.toLowerCase())
+      p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.subject?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  const markAsPaid = (id) => {
-    alert(`Marked payment ID ${id} as paid.`);
-    // In real app, make API call here.
-  };
 
-  const openReceipt = (imgUrl) => {
-    setReceiptImage(imgUrl);
-    setShowModal(true);
-  };
 
   return (
     <div className="container my-4">
-      <h2 className="fw-bold mb-4 text-center">Billing & Payments</h2>
+      <h2 className="fw-bold text-center mb-4">Billing & Payments</h2>
 
-      {/* Search */}
-      <InputGroup className="mb-4">
+      <InputGroup className="mb-3">
         <Form.Control
-          type="text"
-          placeholder="Search by user or payment method..."
+          placeholder="Search by name or subject..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </InputGroup>
 
-      {/* Payments Table */}
-      <Card className="shadow-sm">
+      <Card>
         <Card.Body>
-          <h5 className="mb-3 fw-semibold">Payments Overview</h5>
-          <Table striped hover responsive className="align-middle">
+          <h5 className="mb-3 fw-semibold">Payment Records</h5>
+          <Table striped hover responsive>
             <thead className="table-light">
               <tr>
-                <th>#</th>
-                <th>User</th>
-                <th>Method</th>
-                <th>Amount (PKR)</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Subject</th>
+                <th>Receipt</th>
                 <th>Status</th>
-                <th>Date</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredPayments.map((p, idx) => (
-                <tr key={p.id}>
-                  <td>{idx + 1}</td>
-                  <td>{p.user}</td>
-                  <td>{p.method}</td>
-                  <td>{p.amount}</td>
-                  <td>
-                    <Badge bg={p.status === 'completed' ? 'success' : 'warning'}>
-                      {p.status.charAt(0).toUpperCase() + p.status.slice(1)}
-                    </Badge>
-                  </td>
-                  <td>{p.date}</td>
-                  <td>
-                    <Button
-                      size="sm"
-                      variant="outline-primary"
-                      onClick={() => openReceipt(p.receipt)}
-                    >
-                      <FileText size={16} className="me-1" /> View
-                    </Button>
-                  </td>
-                  <td>
-                    {p.status === 'pending' && (
-                      <Button
-                        size="sm"
-                        variant="success"
-                        onClick={() => markAsPaid(p.id)}
-                      >
-                        <CheckCircle size={16} className="me-1" /> Mark Paid
-                      </Button>
-                    )}
-                    {p.status === 'completed' && <span className="text-muted">—</span>}
-                  </td>
-                </tr>
-              ))}
+              {filteredPayments.length === 0 ? (
+                <tr><td colSpan="6" className="text-center">No payments found.</td></tr>
+              ) : (
+                filteredPayments.map((payment) => (
+                  <tr key={payment.id}>
+                    <td>{payment.id}</td>
+                    <td>{payment.name || '—'}</td>
+                    <td>{payment.subject || '—'}</td>
+                    <td>
+                      {payment.image ? (
+                        <>
+                          <Button
+                            size="sm"
+                            variant="outline-primary"
+                            onClick={() => {
+                              const imageName = payment.image.replace(/^uploads\//, '');
+                              window.open(`http://localhost:3001/${imageName}`, '_blank');
+                            }}
+                          >
+                            View Image
+                          </Button>
+                        </>
+                      ) : (
+                        <span className="text-muted">No image</span>
+                      )}
+                    </td>
+                    <td>
+                      <Badge bg={payment.status === 'approved' ? 'success' : payment.status === 'rejected' ? 'danger' : 'warning'}>
+                        {payment.status || 'pending'}
+                      </Badge>
+                    </td>
+                    <td>
+                      {payment.status === 'pending' ? (
+                        <>
+                          <Button
+                            size="sm"
+                            variant="success"
+                            className="me-2"
+                            onClick={() => handleStatusUpdate(payment.id, 'approved')}
+                            disabled={updatingId === payment.id}
+                          >
+                            {updatingId === payment.id ? <Spinner animation="border" size="sm" /> : <CheckCircle size={16} className="me-1" />}
+                            Approve
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="danger"
+                            onClick={() => handleStatusUpdate(payment.id, 'rejected')}
+                            disabled={updatingId === payment.id}
+                          >
+                            {updatingId === payment.id ? <Spinner animation="border" size="sm" /> : <XCircle size={16} className="me-1" />}
+                            Reject
+                          </Button>
+                        </>
+                      ) : (
+                        <span className="text-muted">—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
         </Card.Body>
       </Card>
-
-      {/* Receipt Modal */}
     </div>
   );
 };

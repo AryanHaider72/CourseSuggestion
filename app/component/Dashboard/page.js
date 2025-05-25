@@ -12,6 +12,8 @@ import {
   Badge,
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const coursesList = [
   "Algorithms and Data Structures",
@@ -119,15 +121,14 @@ const coursesList = [
 ];
 
 const MCQQuizWithSearch = () => {
-  const [ Name, setName ] = useState();
-  const [level, setLevel]= useState("Beginner");
+  const [Name, setName] = useState("");
+  const [level, setLevel] = useState("Beginner");
   const [subject, setSubject] = useState("");
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const itemRefs = useRef([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const [mcqs, setMcqs] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
   const [result, setResult] = useState(null);
@@ -135,8 +136,98 @@ const MCQQuizWithSearch = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
+  const [startDateTime, setStartDateTime] = useState(null);
+  const [endDateTime, setEndDateTime] = useState(null);
+  const [score, setScore] = useState();
+  const [goodAt, setGoodAt] = useState([]);
+  const [needsImprovement, setNeedsImprovement] = useState([]);
+  const router = useRouter();
+  const [submittedData,setsubmitedData]= useState([])
+
+  
+
+  const formatDateTime = (date) => {
+    const pad = (n) => (n < 10 ? "0" + n : n);
+    return (
+      date.getFullYear() +
+      "-" +
+      pad(date.getMonth() + 1) +
+      "-" +
+      pad(date.getDate()) +
+      " " +
+      pad(date.getHours()) +
+      ":" +
+      pad(date.getMinutes()) +
+      ":" +
+      pad(date.getSeconds())
+    );
+  };
 
   const handleNameChange = (e) => setName(e.target.value);
+  useEffect(()=>{
+    const checkauth =async () =>{
+    try{
+    const res = await axios.get(
+      "http://localhost:3001/component/sidebar",{},{
+        withCredentials: true,
+      })
+      if(res.status==200){
+        quizdata();
+      }
+    }
+    catch(error){
+      if(error.response?.status == 401){
+        alert('Login Please');
+        router.push('/login');
+      }
+    }
+  }
+  },[])
+
+  const quizdata = async () => {
+    if (score == null || endDateTime == null) return;
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3001/component/Dashboard",
+        {
+          name: Name,
+          subject: subject,
+          level: level,
+          percent: score,
+          start_time: formatDateTime(startDateTime),
+          end_time: formatDateTime(endDateTime),
+          goodAt,
+          improvement: needsImprovement,
+          courseSuggestions: summary?.courseSuggestions || [],
+          submittedData: submittedData,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      if (res.status === 200) {
+        alert("Result Uploaded Successfully");
+        console.log(submittedData);
+      }
+      
+    } catch (err) {
+      if(err.response?.status == 401){
+        alert("User Not Logged in");
+        router.push('/login');
+      } else {
+        alert("Database Error");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (submitted && score !== undefined && endDateTime !== null) {
+      quizdata();
+    }
+  }, [submitted, score, endDateTime]);
 
   useEffect(() => {
     if (highlightedIndex !== null && itemRefs.current[highlightedIndex]) {
@@ -182,8 +273,6 @@ const MCQQuizWithSearch = () => {
     }
   };
 
-  const toggleVisibility = () => setIsVisible(!isVisible);
-
   const fetchMCQs = async () => {
     setLoading(true);
     setSubmitted(false);
@@ -191,6 +280,8 @@ const MCQQuizWithSearch = () => {
     setSummary(null);
     setUserAnswers({});
     setMcqs([]);
+    setStartDateTime(new Date());
+    setEndDateTime(null);
 
     try {
       const response = await fetch(
@@ -199,14 +290,21 @@ const MCQQuizWithSearch = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: `Generate 20  ${level.toLowerCase()}-level MCQs  on the topic strictly related to ${subject} . Each question should have: question, options array, and answer. Return only JSON.` }] }],
+            contents: [
+              {
+                parts: [
+                  {
+                    text: `Generate 5 ${level.toLowerCase()}-level MCQs on the topic strictly related to ${subject}. Each question should have: question, options array, and answer. Return only JSON.`,
+                  },
+                ],
+              },
+            ],
           }),
         }
       );
       const data = await response.json();
       const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       const jsonMatch = rawText.match(/\[\s*{[\s\S]*?}\s*\]/);
-
       if (jsonMatch) {
         const cleanJson = JSON.parse(jsonMatch[0]);
         setMcqs(cleanJson);
@@ -226,52 +324,93 @@ const MCQQuizWithSearch = () => {
   };
 
   const evaluateAnswers = () => {
+    const now = new Date();
+    setEndDateTime(now);
+  
     let correct = 0;
     let incorrect = 0;
-    const goodAt = [];
-    const needsImprovement = [];
-    const courseSuggestions = [];
-
+  
+    const topicStats = {
+      [subject]: { correct: 0, incorrect: 0 }
+    };
+    const courseSuggestions = new Set();
+  
+    // Store final data to set once after evaluating all answers
+    const finalData = [];
+  
     mcqs.forEach((mcq, idx) => {
-      if (userAnswers[idx] === mcq.answer) {
+      const questionLower = mcq.question.toLowerCase();
+      const isCorrect = userAnswers[idx] === mcq.answer;
+  
+      if (isCorrect) {
         correct++;
-        goodAt.push(mcq.question);
+        topicStats[subject].correct++;
       } else {
         incorrect++;
-        needsImprovement.push(mcq.question);
-
-        if (mcq.question.toLowerCase().includes("data")) {
-          courseSuggestions.push("Mastering Data Structures");
-        } else if (mcq.question.toLowerCase().includes("algorithm")) {
-          courseSuggestions.push("Algorithm Design");
+        topicStats[subject].incorrect++;
+  
+        if (questionLower.includes("data")) {
+          courseSuggestions.add("Mastering Data Structures");
+        } else if (questionLower.includes("algorithm")) {
+          courseSuggestions.add("Algorithm Design");
         } else {
-          courseSuggestions.push(`Improve ${subject} Fundamentals`);
+          courseSuggestions.add(`Improve ${subject} Fundamentals`);
         }
       }
+  
+      finalData.push({
+        question: mcq.question,
+        options: mcq.options,
+        correctAnswer: mcq.answer,
+        selectedOption: userAnswers[idx] || null,
+        isCorrect: isCorrect,
+      });
     });
-
+  
+    setsubmitedData(finalData);  // Set state after the loop (Only once)
+  
+    // Final topic evaluation
+    const goodTopics = [];
+    const improveTopics = [];
+  
+    for (const topic in topicStats) {
+      const { correct, incorrect } = topicStats[topic];
+      if (correct >= incorrect) {
+        goodTopics.push(topic);
+      } else {
+        improveTopics.push(topic);
+      }
+    }
+  
+    setGoodAt(goodTopics);
+    setNeedsImprovement(improveTopics);
+  
+    // Final result and score
     setResult({ correct, total: mcqs.length });
+    setScore((correct / mcqs.length) * 100);
     setSummary({
       subject,
       level,
       total: mcqs.length,
       correct,
       incorrect,
-      goodAt,
-      needsImprovement,
-      courseSuggestions: [...new Set(courseSuggestions)],
+      goodAt: goodTopics,
+      needsImprovement: improveTopics,
+      courseSuggestions: [...courseSuggestions],
     });
-    setSubmitted(true);
   };
+  
+  
 
   return (
-    <Container className="py-5" style={{ overflowY: 'auto', height: '500px', scrollbarWidth: 'none' }}>
+    <Container className="py-5" style={{ overflowY: "scroll", height: "650px" }}>
       <h2 className="text-center mb-4 fw-bold text-warning">
         🎓 Welcome, {Name || "Learner"}!
       </h2>
       <h3>Start Your Personalization</h3>
-      <p className="text-secondary">Fill in you information to get Started with the test of you own choise.</p>
-
+      <p className="text-secondary">
+        Fill in your information to get started with the test of your own choice.
+      </p>
 
       {!showQuiz && (
         <Card className="p-4 shadow-sm">
@@ -328,16 +467,16 @@ const MCQQuizWithSearch = () => {
               </Form.Select>
             </Form.Group>
 
-            <button 
-              id="button1" 
+            <Button
               className="btn text-white"
               variant="warning"
+              type="submit"
               onClick={fetchMCQs}
               disabled={!subject || loading}
               size="lg"
             >
               {loading ? "Generating Quiz..." : "Start Quiz"}
-            </button>
+            </Button>
           </Form>
         </Card>
       )}
@@ -351,8 +490,7 @@ const MCQQuizWithSearch = () => {
       {showQuiz && !loading && (
         <>
           <h4 className="text-center text-secondary mt-5 mb-3">
-            Subject: <span className="text-dark fw-bold">{subject}</span> | Level:{" "}
-            <span className="fw-semibold">{level}</span>
+            Subject: <span className="text-dark fw-bold">{subject}</span> | Level: <span className="fw-semibold">{level}</span>
           </h4>
 
           <Row xs={1} className="g-4">
@@ -365,8 +503,7 @@ const MCQQuizWithSearch = () => {
                     </Card.Title>
                     {mcq.options.map((opt, i) => {
                       const isCorrect = submitted && opt === mcq.answer;
-                      const isWrong =
-                        submitted && userAnswers[index] === opt && opt !== mcq.answer;
+                      const isWrong = submitted && userAnswers[index] === opt && opt !== mcq.answer;
 
                       return (
                         <div
@@ -398,53 +535,35 @@ const MCQQuizWithSearch = () => {
 
           {!submitted && (
             <div className="text-center mt-5">
-              <button id="button1" 
-              className="btn text-white" variant="warning" size="lg" onClick={evaluateAnswers}>
+              <Button
+                className="btn text-white"
+                variant="warning"
+                size="lg"
+                onClick={() => {
+                  evaluateAnswers();
+                  setSubmitted(true);
+                }}
+              >
                 Submit Answers
-              </button>
+              </Button>
             </div>
           )}
 
-          {result && (
+          {score !== undefined && (
             <Alert variant="warning" className="mt-4 text-center">
               <h4 className="fw-bold">
-                You scored: {result.correct} / {result.total}
+                You scored: {result.correct} / {result.total} ({score.toFixed(2)}%)
               </h4>
             </Alert>
           )}
 
-          {summary && (
-            <div className="mt-4">
-              <h5 className="text-center fw-bold mb-3">📊 Smart AI Feedback</h5>
-              <Row className="text-center mb-4">
-                <Col>
-                  <h6 style={{ color: "green" }}>You&apos;re Good At:</h6>
-                  {summary.goodAt.map((q, idx) => (
-                    <p key={idx} className="text-success small">
-                      ✅ {q}
-                    </p>
-                  ))}
-                </Col>
-                <Col>
-                  <h6 style={{ color: "red" }}>Needs Improvement:</h6>
-                  {summary.needsImprovement.map((q, idx) => (
-                    <p key={idx} className="text-danger small">
-                      ❌ {q}
-                    </p>
-                  ))}
-                </Col>
-              </Row>
-
-              <div className="text-center">
-                <h6 className="fw-semibold mb-2">🎯 Suggested Courses:</h6>
-                {summary.courseSuggestions.map((course, idx) => (
-                  <Badge key={idx} bg="warning" className="mx-1 p-2 text-dark fs-6">
-                    {course}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+          {startDateTime && endDateTime && (
+            <Alert variant="light" className="text-center">
+              <div><strong>Quiz Started:</strong> {startDateTime.toLocaleString()}</div>
+              <div><strong>Quiz Submitted:</strong> {endDateTime.toLocaleString()}</div>
+            </Alert>
           )}
+
         </>
       )}
     </Container>

@@ -10,15 +10,22 @@ import CourseManagement from '../CourseManagment/page';
 import BillingAndPayments from '../BillingPayment/page';
 import ChangePass from '../password/page';
 import SettingsPage from '../setting/page';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 export default function UserLayout({ children }) {
   const [showUser, setShowUser] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [userData, setUserData] = useState(null); 
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const sidebarRef = useRef(null);
   const [active, setactive] = useState('dashboard');
+   const router = useRouter();
+
+  const sidebarRef = useRef(null);
+  const settingsRef = useRef(null);
+  const userRef = useRef(null);
 
   const links = [
     { key: 'UserManagement', label: 'User Management', icon: <ShoppingCart size={25} /> },
@@ -30,6 +37,26 @@ export default function UserLayout({ children }) {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/component/logout",
+        {}, // Empty body
+        {
+          withCredentials: true, // ✅ This is the correct place
+        }
+      );
+  
+      console.log("Logout success:", response.data.message);
+  
+      setUserData(null); // Clear user state
+  
+      router.push("/login"); // Redirect to login
+    } catch (error) {
+      console.error("Logout error:", error.response?.data || error.message);
+      alert("Failed to logout. Please try again.");
+    }
+  };
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -39,6 +66,7 @@ export default function UserLayout({ children }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Close sidebar on outside click (for mobile)
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isMobile && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -48,6 +76,28 @@ export default function UserLayout({ children }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMobile]);
+
+  // Close settings dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showSettings && settingsRef.current && !settingsRef.current.contains(event.target)) {
+        setShowSettings(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showSettings]);
+
+  // Close user dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showUser && userRef.current && !userRef.current.contains(event.target)) {
+        setShowUser(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showUser]);
 
   return (
     <div className="d-flex" style={{ minHeight: '100vh', position: 'relative' }}>
@@ -64,13 +114,13 @@ export default function UserLayout({ children }) {
             zIndex: 10000,
             left: 0,
             top: 0,
-            backgroundColor: '#ffa835', // ensure bg is preserved
+            backgroundColor: '#ffa835',
           }}
         >
           <a onClick={() => setactive('dashboard')} style={{ textDecoration: 'none', color: 'white', cursor: 'pointer' }}>
             <h4 className={`fs-2 fw-bold text-center mt-4 mb-4 ${isSidebarCollapsed ? 'text-center' : ''}`}
               style={{ display: isSidebarCollapsed ? 'none' : 'block' }}>
-              EduCourse
+              WidsomNest
             </h4>
           </a>
           <ul className="list-unstyled">
@@ -103,7 +153,7 @@ export default function UserLayout({ children }) {
 
           <div className="d-flex align-items-center gap-3 position-relative">
             {/* User Dropdown */}
-            <div className="position-relative">
+            <div className="position-relative" ref={userRef}>
               <User
                 role="button"
                 color="#ffa835"
@@ -117,7 +167,7 @@ export default function UserLayout({ children }) {
                   <button className="dropdown-item" onClick={() => setactive('edit')}>
                     <Pencil size={14} className="me-2" /> Edit Profile
                   </button>
-                  <button className="dropdown-item">
+                  <button className="dropdown-item" onClick={handleLogout}>
                     <LogOut size={14} className="me-2" /> Logout
                   </button>
                 </div>
@@ -125,7 +175,7 @@ export default function UserLayout({ children }) {
             </div>
 
             {/* Settings Dropdown */}
-            <div className="position-relative">
+            <div className="position-relative" ref={settingsRef}>
               <Settings
                 role="button"
                 color="#ffa835"

@@ -126,75 +126,13 @@ export default function Landing() {
           };
     return (
       <>
-    <div className={`parent-div ${showoverly ? 'd-flex':'d-none'}`}onClick={handleParentClick}>
-        <div className="overly-div" onClick={stopPropagation}>
-            <div style={{}}>
-                <X  onClick={handleclick} cursor={"pointer"} style={{position:'absolute', right:'2%', top:'2%'}}/>
-            </div>
-            <div className="mx-3" style={{width:'90%'}}>
-                <h1 className="mt-3 ">Website Development </h1>
-                <hr className="w-100"/>
-                <h3 className="mt-3 " style={{textDecoration:'underline 3px #ffa835'}}>About Course:</h3>
-                <p className="text-muted" style={{width:'95%'}}>This comprehensive course takes you from the basics of front-end web development to advanced back-end skills, enabling you to build fully functional, responsive, and scalable websites. Whether you&apos;re a complete beginner or 
-                    looking to upgrade your skills, this course prepares you for real-world projects and job-ready outcomes.</p>
-                <hr className="w-50 mt-5"></hr>
-                <h3 className="mt-3 " style={{textDecoration:'underline 3px #ffa835'}}>Course Objectives:</h3>
-                <li className="container text-muted" style={{width:'95%'}}>Build responsive websites using HTML5, CSS3, and JavaScript.</li>
-                <li className="container text-muted" style={{width:'95%'}}>Use modern frameworks like Bootstrap, React, and Node.js.</li>
-                <li className="container text-muted" style={{width:'95%'}}>Manage data with MongoDB and integrate back-end functionality.</li>
-                <li className="container text-muted" style={{width:'95%'}}>Deploy websites to live servers (GitHub Pages, Netlify, or Heroku).</li>
-                <li className="container text-muted" style={{width:'95%'}}>Understand version control with Git and GitHub.</li>
-                <li className="container text-muted" style={{width:'95%'}}>Build portfolio-ready web projects.</li>
-                <hr className="w-50 mt-5"></hr>
-                <h3 className="mt-3 " style={{textDecoration:'underline 3px #ffa835'}}>Course Outline:</h3>
-
-                <p className="mx-4 fs-5 mt-4 mb-0 fw-bold">Module 1: Web Development Fundamentals</p>
-                <li className="mx-5 text-muted">Introduction to Web Development (Frontend, Backend, Full Stack)</li>
-                <li className="mx-5 text-muted">Environment setup (VS Code, Git, Browsers)</li>
-                <li className="mx-5 text-muted">HTML, CSS basics and responsive design</li>
-
-                <p className="mx-4 fs-5 mt-4 mb-0 fw-bold">Module 2: JavaScript Essentials</p>
-                <li className="mx-5 text-muted">Variables, functions, loops & conditionals</li>
-                <li className="mx-5 text-muted">DOM Manipulation & Events</li>
-                <li className="mx-5 text-muted">Intro to Bootstrap and UI styling</li>
-
-                <p className="mx-4 fs-5 mt-4 mb-0 fw-bold">Module 3: React JS</p>
-                <li className="mx-5 text-muted">Components, JSX, Props & State</li>
-                <li className="mx-5 text-muted">Hooks and building SPAs</li>
-
-                <p className="mx-4 fs-5 mt-4 mb-0 fw-bold">Module 4: Backend & Database</p>
-                <li className="mx-5 text-muted">Node.js, Express & REST APIs</li>
-                <li className="mx-5 text-muted">MongoDB fundamentals & CRUD operations</li>
-
-                <p className="mx-4 fs-5 mt-4 mb-0 fw-bold">Module 5: Version Control & Final Project</p>
-                <li className="mx-5 text-muted">Git, GitHub, Netlify/Vercel deployment</li>
-                <li className="mx-5 text-muted">Capstone project: Full-stack app integration</li>
-              {/*
-                <h3 className="mt-3 " style={{textDecoration:'underline 3px #ffa835'}}>Payment Methods</h3>
-                <div className="container d-flex ">
-                    <div className="col-md-6 col-sm-12 d-flex flex-column" style={{marginLeft:'5px', marginBottom:'10px'}}>
-                            <label htmlFor="Select" className="mt-3 fs-5 mb-2">Payment Methods:</label>
-                            <select id="paymentMethod" name="paymentMethod" className="form-select" onChange={(e) => setSelectedForm(e.target.value)} defaultValue="">
-                            <option value="">Select Method</option>
-                            <option value="EasyPaisacash">EasyPaisa Transfer</option>
-                            <option value="BankTransfer">Bank Transfer</option>
-                            </select>
-                            {selectedForm === 'EasyPaisacash' && <CashPaymentForm />}
-                            {selectedForm === 'BankTransfer' && <CardPaymentForm />}
-                    </div>
-                </div>
-                */}
-                <a className="btn mt-3 mb-3 text-light mx-auto text-center" id="button1" href="/login">Payments</a>
-            </div>
-        </div>
-    </div>
     
         <section className="background" id="home-section">
             <nav className="navbar navbar-expand-lg navbar-light bg-transparent" style={{backdropFilter: 'blur(10px)',WebkitBackdropFilter: 'blur(10px)',backgroundColor: 'rgba(255, 255, 255, 0.3)'}}>
             <div className="container-fluid d-flex justify-content-between align-items-center">
     
             <div style={{marginLeft:'10px', display:'flex', justifyContent:'center', alignItems:'center'}}>
-                    <h4 style={{color:'#ffa835', fontWeight:'700', fontSize:'30px', marginTop:'10px', marginLeft:'10px'}}>EduCourse</h4>
+                    <h4 style={{color:'#ffa835', fontWeight:'700', fontSize:'30px', marginTop:'10px', marginLeft:'10px'}}>WidsomNest</h4>
                 </div>
     
                 {/* 🔸 Mobile Toggler */}
@@ -222,7 +160,7 @@ export default function Landing() {
     
                 {/* 🔸 Buttons */}
                 <div className="d-flex align-items-center" style={{ gap: '10px' }}>
-                    <Link href="/signup" className="btn text-white" id="button1">Join Now</Link>
+                    <Link href="/register" className="btn text-white" id="button1">Join Now</Link>
                     <Link href="/login" className="btn text-white"id="button2">Log in</Link>
                 </div>
                 </div>
@@ -265,7 +203,7 @@ export default function Landing() {
                                         <p className="text-secondary"><span style={{color:'#ffa835'}}>(4.5)</span>Based Rating</p>
                                         <h3 className="mb-3">1250<span className="text-secondary fs-5">/-</span></h3>
                                     </div>
-                                    <a href="#course-section" className="btn text-white" onClick={handleCloseOverlay} id="button5">Find Out More</a>
+                                    <a href="#course-section" className="btn text-white"  id="button5">Find Out More</a>
                                 </div>
                             </div>
                         </div>
@@ -280,7 +218,7 @@ export default function Landing() {
                                         <p className="text-secondary"><span style={{color:'#ffa835'}}>(4.5)</span>Based Rating</p>
                                         <h3 className="mb-3">1250<span className="text-secondary fs-5">/-</span></h3>
                                     </div>
-                                    <a href="#course-section" className="btn text-white" onClick={handleCloseOverlay} id="button5">Find Out More</a>
+                                    <a href="#course-section" className="btn text-white"  id="button5">Find Out More</a>
                                 </div>
                             </div>
                         </div>
@@ -295,7 +233,7 @@ export default function Landing() {
                                         <p className="text-secondary"><span style={{color:'#ffa835'}}>(4.5)</span>Based Rating</p>
                                         <h3 className="mb-3">1250<span className="text-secondary fs-5">/-</span></h3>
                                     </div>
-                                    <a href="#course-section" className="btn text-white" onClick={handleCloseOverlay} id="button5">Find Out More</a>
+                                    <a href="#course-section" className="btn text-white"  id="button5">Find Out More</a>
                                 </div>
                             </div>
                         </div>
@@ -330,8 +268,8 @@ export default function Landing() {
 
                     <div className="tab-content p-3 border border-top-0" id="myTabContent">
                     <div className="tab-pane fade show active" id="active" role="tabpanel" aria-labelledby="active-tab">
-                        At EduCourse, our mission is to empower learners through high-quality, flexible education that prepares them for real-world challenges and long-term success.
-                        <br/>EduCourse equips learners with the skills and confidence to thrive in real-world careers through flexible, high-quality education.
+                        At WidsomNest, our mission is to empower learners through high-quality, flexible education that prepares them for real-world challenges and long-term success.
+                        <br/>WidsomNest equips learners with the skills and confidence to thrive in real-world careers through flexible, high-quality education.
                         <li>Delivering job-relevant and practical skills</li>
                         <li>Building learner confidence through expert guidance</li>
                         <li>Equipping individuals with a competitive advantage in today&apos;s digital economy</li>
@@ -344,8 +282,8 @@ export default function Landing() {
                         <li>Build a vibrant, inclusive learning community worldwide</li>
                     </div>
                     <div className="tab-pane fade" id="link2" role="tabpanel" aria-labelledby="link2-tab">
-                    Education should be a right, not a privilege. At EduCourse, we exist to eliminate the common barriers to quality learning, making it open, engaging, and accessible for all.
-                        <br/>At EduCourse, we believe learning should be accessible to everyone — breaking barriers and making quality education truly inclusive. 
+                    Education should be a right, not a privilege. At WidsomNest, we exist to eliminate the common barriers to quality learning, making it open, engaging, and accessible for all.
+                        <br/>At WidsomNest, we believe learning should be accessible to everyone — breaking barriers and making quality education truly inclusive. 
                         <li>Make education affordable and flexible</li>
                         <li>Reach learners regardless of location or background</li>
                         <li>Deliver learning experiences that truly transform lives</li>

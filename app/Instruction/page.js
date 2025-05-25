@@ -6,7 +6,7 @@ export default function instruction(){
             <div className="container-fluid d-flex justify-content-between align-items-center">
     
             <div style={{marginLeft:'10px', display:'flex', justifyContent:'center', alignItems:'center'}}>
-                    <h4 style={{color:'#ffa835', fontWeight:'700', fontSize:'30px', marginTop:'10px', marginLeft:'10px'}}>EduCourse</h4>
+                    <h4 style={{color:'#ffa835', fontWeight:'700', fontSize:'30px', marginTop:'10px', marginLeft:'10px'}}>WidsomNest</h4>
                 </div>
     
                 {/* 🔸 Mobile Toggler */}

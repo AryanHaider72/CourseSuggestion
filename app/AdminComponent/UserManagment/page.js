@@ -1,27 +1,47 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Table, Button, Form, InputGroup, Pagination } from 'react-bootstrap';
-import { Pencil, UserCheck, UserX, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
+import axios from 'axios';
 
 const UserManagement = () => {
-  // Sample data for users
-  const users = [
-    { id: 1, name: 'Ali Ahmed', email: 'ali.ahmed@example.com', status: 'active',},
-    { id: 2, name: 'Sara Khan', email: 'sara.khan@example.com', status: 'inactive',  },
-    { id: 3, name: 'Usman Tariq', email: 'usman.tariq@example.com', status: 'active',  },
-    { id: 4, name: 'Hina Sheikh', email: 'hina.sheikh@example.com', status: 'inactive',  },
-    // Add more sample users as needed
-  ];
-
-  // State for managing search query
+  // State for managing users data fetched from the API
+  const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [usersPerPage] = useState(5);  // Number of users per page
 
+  // Fetch users from the API
+  useEffect(() => {
+    const showUser = async () => {
+      try {
+        const response = await axios.post('http://localhost:3001/AdminComponent/UserManagment', {}, { withCredentials: true });
+        if (response.status === 200) {
+          console.log(response.data);
+          setUsers(response.data); 
+        }
+      } catch (error) {
+        if (error.response) {
+          // Handle error responses from the server
+          if (error.response.status === 500) {
+            console.log("Database Error", error.response);
+          } else if (error.response.status === 401) {
+            console.log("User not Logged in", error.response);
+          } else if (error.response.status === 404) {
+            console.log("No Data Found", error.response);
+          } else {
+            console.log(error.response);
+          }
+        }
+      }
+    };
+    showUser();
+  }, []);
+
   // Filtering users based on the search query
   const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+    (user.name && user.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (user.email && user.email.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   // Pagination Logic
@@ -53,37 +73,35 @@ const UserManagement = () => {
           <Table striped bordered hover responsive>
             <thead className="table-light">
               <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Status</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {currentUsers.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.name}</td>
+                  <td>{user.id}</td>
+                  <td>{user.username}</td>
                   <td>{user.email}</td>
-                  <td>
-                    <span className={`badge ${user.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>
-                      {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-                    </span>
-                  </td>
-                  <td>
-                    <Button variant={user.status === 'active' ? 'warning' : 'success'} size="md" className="me-2">
-                      {user.status === 'active' ? <UserX size={16} /> : <UserCheck size={16} />}
-                      {user.status === 'active' ? 'Deactivate' : 'Activate'}
-                    </Button>
-                    <Button variant="danger" size="md">
-                      <Trash2 size={16} /> Delete
-                    </Button>
-                  </td>
+                  <td><span class="badge bg-success">Active</span></td>
                 </tr>
               ))}
             </tbody>
           </Table>
         </Card.Body>
       </Card>
+
+      {/* Pagination */}
+      <Pagination>
+        {/* Dynamically generate pagination items based on filtered data */}
+        {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, index) => (
+          <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
+            {index + 1}
+          </Pagination.Item>
+        ))}
+      </Pagination>
     </div>
   );
 };

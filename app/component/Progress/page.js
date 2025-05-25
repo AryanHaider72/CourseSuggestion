@@ -2,30 +2,43 @@
 
 import { ChevronUp } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import {
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-
-const users = [
-  { id: "1", name: "Alice", subject: "C++ Programming", level: "Intermediate", percent: "73%" },
-  { id: "2", name: "Bob", subject: "Web Development", level: "Beginner", percent: "36%" },
-  { id: "3", name: "Charlie", subject: "Python Data Analyst", level: "Master", percent: "55%" },
-];
+import axios from "axios";
 
 export default function ProgressReport() {
+  const [users, setUsers] = useState([]);
   const [userData, setUserData] = useState(null);
+  const [mcqs, setMcqs] = useState([]);
   const [showScroll, setShowScroll] = useState(false);
   const scrollContainerRef = useRef(null);
 
+  // Fetch data from backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://localhost:3001/component/Progress', {}, {
+          withCredentials: true, // Send session cookie along
+        });
+
+        if (response.status === 200) {
+          const { progress, questions } = response.data.data;
+          setUsers(progress);  // Set users' progress data
+          setMcqs(questions); 
+          console.log(questions);
+        }
+      } catch (error) {
+        if (error.response?.status === 401) {
+          console.log("User not logged in", error);
+        } else {
+          alert("Database Error");
+          console.log(error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Handle scrolling to show the button
   useEffect(() => {
     const handleScroll = () => {
       if (scrollContainerRef.current) {
@@ -45,48 +58,28 @@ export default function ProgressReport() {
     };
   }, []);
 
+  // Handle user click to show detailed report
   const handleClick = (user) => {
+    const topicsMastered = JSON.parse(user.good || '[]');
+    const areasToImprove = JSON.parse(user.improvement || '[]');
+    const courseSuggestions = JSON.parse(user.courseSuggestions || '[]');
     setUserData({
       name: user.name,
-      email: "john@example.com",
       course: user.subject,
       level: user.level,
       progress: parseInt(user.percent),
-      mcqsAttempted: 120,
-      accuracy: 82,
-      avgScore: 76,
-      topicsMastered: ["HTML", "CSS", "JavaScript"],
-      areasToImprove: ["React", "Testing"],
-      lastLogin: "2025-04-12",
-      lastTest: "React Basics Quiz",
-      lastModule: "API Integration",
+      TotalMCqs: user.TotalMCqs || 5,
+      accuracy: user.percent || 82,
+      topicsMastered: topicsMastered,
+      areasToImprove: areasToImprove,
+      courseSuggestions: courseSuggestions,
+      start: user.start,
+      end: user.end,
     });
   };
 
-  const COLORS = ["#00C49F", "#FF8042"];
-
-  const pieData = userData
-    ? [
-        { name: "Correct", value: userData.accuracy },
-        { name: "Incorrect", value: 100 - userData.accuracy },
-      ]
-    : [];
-
-  const barData = [
-    { topic: "HTML", score: 90 },
-    { topic: "CSS", score: 85 },
-    { topic: "JavaScript", score: 88 },
-    { topic: "React", score: 60 },
-    { topic: "Testing", score: 55 },
-  ];
-
   return (
-    <div
-      ref={scrollContainerRef}
-      className="progress-page-container"
-      style={{overflowY:'scroll'}}
-    >
-      {/* Title */}
+    <div ref={scrollContainerRef} className="progress-page-container" style={{ overflowY: 'scroll' }}>
       <h1 className="text-center">Progress Report</h1>
       <hr className="mt-3 mb-4" />
 
@@ -96,7 +89,6 @@ export default function ProgressReport() {
           <thead style={{ backgroundColor: "#ffa835" }}>
             <tr>
               <th>ID</th>
-              <th>Name</th>
               <th>Subject</th>
               <th>Level</th>
               <th>Percentage</th>
@@ -104,10 +96,9 @@ export default function ProgressReport() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user, index) => (
               <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
+                <td>{index + 1}</td>
                 <td>{user.subject}</td>
                 <td>{user.level}</td>
                 <td>{user.percent}</td>
@@ -135,8 +126,7 @@ export default function ProgressReport() {
           <div className="card mb-4 shadow-sm p-3">
             <div className="card-body">
               <h5 className="text-center text-md-start">User Summary</h5>
-              <p><strong>Name:</strong> {userData.name}</p>
-              <p><strong>Email:</strong> {userData.email}</p>
+              <p><strong>Name: </strong>{userData.name}</p>
               <p><strong>Course:</strong> {userData.course}</p>
               <p><strong>Level:</strong> {userData.level}</p>
             </div>
@@ -148,43 +138,45 @@ export default function ProgressReport() {
               <h5 className="text-center text-md-start">MCQ/Test Performance</h5>
               <table className="table table-bordered mt-3">
                 <tbody>
-                  <tr><th>Total MCQs Attempted</th><td>{userData.mcqsAttempted}</td></tr>
+                  <tr><th>Total MCQs Attempted</th><td>{userData.TotalMCqs}</td></tr>
                   <tr><th>Accuracy</th><td>{userData.accuracy}%</td></tr>
-                  <tr><th>Average Score</th><td>{userData.avgScore}%</td></tr>
                   <tr><th>Topics Mastered</th><td>{userData.topicsMastered.join(", ")}</td></tr>
-                  <tr><th>Areas to Improve</th><td>{userData.areasToImprove.join(", ")}</td></tr>
+                  <tr><th>Areas to Improve</th><td>{Array.isArray(userData.areasToImprove) ? userData.areasToImprove.join(", ") : "No data"}</td></tr>
                 </tbody>
               </table>
+            </div>
+          </div>
 
-              {/* Charts */}
-              <div className="row mt-4">
-                <div className="col-12 col-md-6 mb-4">
-                  <h6 className="text-center">Accuracy Breakdown</h6>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                      <Pie dataKey="value" data={pieData} cx="50%" cy="50%" outerRadius={80} label>
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-
-                <div className="col-12 col-md-6 mb-4">
-                  <h6 className="text-center">Scores by Topic</h6>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <BarChart data={barData}>
-                      <XAxis dataKey="topic" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="score" fill="#ffa835" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
+          {/* MCQs Analysis */}
+          <div className="card mb-4 shadow-sm p-3" style={{overflowX:'scroll',maxWidth:'80vw'}}>
+            <div className="card-body">
+              <h5 className="text-center text-md-start">MCQ/Test Analysis</h5>
+              <table className="table table-bordered mt-3">
+                <tbody>
+                  <tr>
+                    <td className="fs-5 fw-bold">ID</td>
+                    <td className="fs-5 fw-bold">Question</td>
+                    <td className="fs-5 fw-bold">Option 1</td>
+                    <td className="fs-5 fw-bold">Option 2</td>
+                    <td className="fs-5 fw-bold">Option 3</td>
+                    <td className="fs-5 fw-bold">Option 4</td>
+                    <td className="fs-5 fw-bold">Selected Option</td>
+                    <td className="fs-5 fw-bold">Correct Option</td>
+                  </tr>
+                  {mcqs.map((mcq, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{mcq.question}</td>
+                      <td>{mcq.option1}</td>
+                      <td>{mcq.option2}</td>
+                      <td>{mcq.option3}</td>
+                      <td>{mcq.option4}</td>
+                      <td>{mcq.selectedoption}</td>
+                      <td>{mcq.correctoption}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -192,9 +184,8 @@ export default function ProgressReport() {
           <div className="card shadow-sm p-3 mb-4">
             <div className="card-body">
               <h5 className="text-center text-md-start">Last Activity</h5>
-              <p><strong>Last Login:</strong> {userData.lastLogin}</p>
-              <p><strong>Last Test Taken:</strong> {userData.lastTest}</p>
-              <p><strong>Last Completed Module:</strong> {userData.lastModule}</p>
+              <p><strong>Test Started: </strong>{new Date(userData.start).toLocaleString()}</p>
+              <p><strong>Test Ended: </strong>{new Date(userData.end).toLocaleString()}</p>
             </div>
           </div>
         </>
