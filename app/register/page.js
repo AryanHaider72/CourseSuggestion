@@ -19,7 +19,7 @@ export default function Signup(){
       setmessage("Password Matched");
       setMessageColor('success');
     try {
-      const res = await axios.get(" https://coursesuggestion-production.up.railway.app/register", {
+      const res = await axios.get(" http://localhost:8080/register", {
         username: username,
         email: useremail,
         password: userpass,

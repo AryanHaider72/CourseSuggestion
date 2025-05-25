@@ -40,7 +40,7 @@ export default function UserLayout({ children }) {
   const handleLogout = async () => {
     try {
       const response = await axios.get(
-        "https://coursesuggestion-production.up.railway.app/component/logout",
+        "http://localhost:8080/component/logout",
         {}, // Empty body
         {
           withCredentials: true, // ✅ This is the correct place

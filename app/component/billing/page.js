@@ -11,7 +11,7 @@ const BillingAndPayments = () => {
     const fetchPayments = async () => {
       try {
         const response = await axios.get(
-          'https://coursesuggestion-production.up.railway.app/component/billing',
+          'http://localhost:8080/component/billing',
           {},
           { withCredentials: true }
         );

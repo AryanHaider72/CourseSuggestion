@@ -22,7 +22,7 @@ const CourseManagement = () => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          'https://coursesuggestion-production.up.railway.app/AdminComponent/CourseManagment',
+          'http://localhost:8080/AdminComponent/CourseManagment',
           {},
           { withCredentials: true }
         );

@@ -22,7 +22,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 const sessionStore = new MySQLStore({}, db);
-// Session configuration
+// Session configuration .
 app.use(
     session({
         key: 'user_sid',
@@ -86,8 +86,8 @@ app.get('/component/sidebar', authMiddleware, (req, res) => {
 });
 
 
-// Login route
-app.get('/login', (req, res) => {
+// Login routes
+app.post('/login', (req, res) => {
     const { email, password } = req.body;
 
     // Check for admin login

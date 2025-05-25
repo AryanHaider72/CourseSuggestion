@@ -14,7 +14,7 @@ const PurchasedCourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('https://coursesuggestion-production.up.railway.app/component/Purchased', {}, {
+        const response = await axios.get('http://localhost:8080/component/Purchased', {}, {
           withCredentials: true,
         });
 

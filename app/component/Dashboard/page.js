@@ -168,7 +168,7 @@ const MCQQuizWithSearch = () => {
     const checkauth =async () =>{
     try{
     const res = await axios.get(
-      "https://coursesuggestion-production.up.railway.app/component/sidebar",{},{
+      "http://localhost:8080/component/sidebar",{},{
         withCredentials: true,
       })
       if(res.status==200){
