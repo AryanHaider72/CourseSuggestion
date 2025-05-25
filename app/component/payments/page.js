@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState,useRef } from "react";
 import CourseSuggestions from "../suggestion/page";
 import { ChevronUp } from "lucide-react";
