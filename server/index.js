@@ -18,6 +18,8 @@ app.use(cookieParser());
 app.use(cors({
     origin: 'http://localhost:3000', // Your frontend's URL
     credentials: true, // Ensure cookies are sent with requests
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 const sessionStore = new MySQLStore({}, db);
 // Session configuration
