@@ -73,7 +73,7 @@ const handleSendMessage = async (e) => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         "http://localhost:8080/component/logout",
         {}, // Empty body
         {

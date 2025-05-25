@@ -24,7 +24,7 @@ export default function SettingsPage() {
   const updatefunction = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get("http://localhost:8080/AdminComponent/setting", {
+      const res = await axios.post("http://localhost:8080/AdminComponent/setting", {
         name: newName,
         phoneNumber,
         country,

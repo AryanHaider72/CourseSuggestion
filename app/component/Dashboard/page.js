@@ -167,7 +167,7 @@ const MCQQuizWithSearch = () => {
   useEffect(()=>{
     const checkauth =async () =>{
     try{
-    const res = await axios.get(
+    const res = await axios.post(
       "http://localhost:8080/component/sidebar",{},{
         withCredentials: true,
       })
@@ -188,7 +188,7 @@ const MCQQuizWithSearch = () => {
     if (score == null || endDateTime == null) return;
 
     try {
-      const res = await axios.get(
+      const res = await axios.post(
         " /component/Dashboard",
         {
           name: Name,

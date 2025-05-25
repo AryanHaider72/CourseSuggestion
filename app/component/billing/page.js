@@ -10,7 +10,7 @@ const BillingAndPayments = () => {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.post(
           'http://localhost:8080/component/billing',
           {},
           { withCredentials: true }

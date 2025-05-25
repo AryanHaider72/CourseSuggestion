@@ -21,7 +21,7 @@ const CourseManagement = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.post(
           'http://localhost:8080/AdminComponent/CourseManagment',
           {},
           { withCredentials: true }
