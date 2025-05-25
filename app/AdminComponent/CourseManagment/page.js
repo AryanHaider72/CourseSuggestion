@@ -22,7 +22,7 @@ const CourseManagement = () => {
     const fetchCourses = async () => {
       try {
         const response = await axios.post(
-          'http://localhost:3001/AdminComponent/CourseManagment',
+          'http://localhost:8080/AdminComponent/CourseManagment',
           {},
           { withCredentials: true }
         );

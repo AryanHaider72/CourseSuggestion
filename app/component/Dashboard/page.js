@@ -168,7 +168,7 @@ const MCQQuizWithSearch = () => {
     const checkauth =async () =>{
     try{
     const res = await axios.get(
-      "http://localhost:3001/component/sidebar",{},{
+      "http://localhost:8080/component/sidebar",{},{
         withCredentials: true,
       })
       if(res.status==200){
@@ -189,7 +189,7 @@ const MCQQuizWithSearch = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3001/component/Dashboard",
+        "http://localhost:8080/component/Dashboard",
         {
           name: Name,
           subject: subject,
